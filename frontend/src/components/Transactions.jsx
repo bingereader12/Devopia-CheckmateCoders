@@ -10,7 +10,7 @@ const Transactions = ({ handleClick }) => {
       </h1>
       <div className="px-5 space-y-10 w-fit">
         <div className="py-5 mt-10 border rounded-lg pl-10">
-          <h3 className="text-lg text-gray-500 font-bold pb-4">Transcation history</h3>
+          <h3 className="text-lg text-gray-500 font-bold pb-4">Transaction history</h3>
           <TransactionGraph />
         </div>
         <div>
