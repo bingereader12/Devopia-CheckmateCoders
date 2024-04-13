@@ -56,8 +56,8 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div className="bg-primaryBlack p-3 rounded-md text-center">
         <p className="text-[#ffffff] opacity-50">{`${label}`}</p>
-        <p className={`text-[#00ff00] ${payload[1].value>=payload[0].value && "opacity-50"}`}>Inbound: {`${payload[0].value}`}</p>
-        <p className={`text-[#ff0000] ${payload[0].value>=payload[1].value && "opacity-50"}`}>Outbound: {`${payload[1].value}`}</p>
+        <p className={`text-[#00ff00] ${payload[1].value>=payload[0].value && "opacity-50"}`}>Inbound: ₹{`${payload[0].value}`}</p>
+        <p className={`text-[#ff0000] ${payload[0].value>=payload[1].value && "opacity-50"}`}>Outbound: ₹{`${payload[1].value}`}</p>
         {/* <p className="intro">{getIntroOfPage(label)}</p> */}
         {/* <p className="desc">Anything you want can be displayed here.</p> */}
       </div>
