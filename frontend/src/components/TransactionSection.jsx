@@ -1,4 +1,5 @@
 import React from "react";
+import IndividualTransaction from "./IndividualTransaction";
 
 const TransactionSection = ({ type }) => {
   return (
@@ -12,9 +13,15 @@ const TransactionSection = ({ type }) => {
         )}
       </span>
       <div className="flex flex-col p-4 gap-3">
-        <span>Transaction</span>
-        <span>Transaction</span>
-        <span>Transaction</span>
+        <span>
+          <IndividualTransaction type={type} />
+        </span>
+        <span>
+          <IndividualTransaction type={type} />
+        </span>
+        <span>
+          <IndividualTransaction type={type} />
+        </span>
       </div>
     </div>
   );

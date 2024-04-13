@@ -16,7 +16,7 @@ const Dashboard = () => {
   console.log(selectedMenu);
 
   return (
-    <div className="h-screen border border-red-500 flex bg-primaryBlack text-white">
+    <div className="h-screen flex bg-primaryBlack text-white">
       <Sidebar handleClick={handleClick} />
       <div className="w-full p-8">
         {selectedMenu === "Savings" && <Savings />}
