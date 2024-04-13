@@ -15,7 +15,22 @@ const Sidebar = () => {
       <div className='flex flex-col gap-6 text-justify font-semibold'>
         <NavLink to="/dashboard" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
           <button className='flex flex-row gap-2'>
-          {activeLink ? <RiHome5Fill style={{fontSize: 22}}/> : <RiHome5Line style={{fontSize: 22}}/>}Dashboard
+          {/* {activeLink ? <RiHome5Fill style={{fontSize: 22}}/> : <RiHome5Line style={{fontSize: 22}}/>}Dashboard */}Dashboard
+          </button>
+        </NavLink>
+        <NavLink to="/savings" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
+          <button className='flex flex-row gap-2'>
+          {/* {activeLink ? <IoDocuments style={{fontSize: 22}}/> : <IoDocumentsOutline style={{fontSize: 22}}/>}Myinternships */}savings
+          </button>
+        </NavLink>
+        <NavLink to="/transcations" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
+          <button className='flex flex-row gap-2'>
+          {/* {activeLink ? <MdExplore style={{fontSize: 22}}/> : <MdOutlineExplore style={{fontSize: 22}}/>}Explore */}transcations
+          </button>
+        </NavLink>
+        <NavLink to="/investment" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
+          <button className='flex flex-row gap-2'>
+          {/* {activeLink ? <IoSettings style={{fontSize: 22}}/> : <IoSettingsOutline style={{fontSize: 22}}/>}Settings */}investment
           </button>
         </NavLink>
       </div>

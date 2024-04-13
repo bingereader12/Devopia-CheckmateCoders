@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
-    <div className="bg-primaryBlack min-h-screen">
+    <div className="bg-white min-h-screen">
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
