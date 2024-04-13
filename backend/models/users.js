@@ -1,78 +1,86 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
- fname: {
+  fname: {
     type: String,
-    required: true
- },
- lname: {
+    required: true,
+  },
+  lname: {
     type: String,
-    required: true
- },
- email: {
+    required: true,
+  },
+  email: {
     type: String,
-    required: true
- },
- phone: {
+    required: true,
+  },
+  phone: {
     type: String,
-    required: true
- },
- password: {
+    required: true,
+  },
+  password: {
     type: String,
-    required: true
- },
- dob: {
+    required: true,
+  },
+  dob: {
     type: Date,
-    required: true
- },
- maritalStatus: {
+    required: true,
+  },
+  maritalStatus: {
     type: String,
-    enum: ["married","single"],
-    required: true
- },
- avgMonthlyIncome: {
+    enum: ["married", "single"],
+    required: true,
+  },
+  avgMonthlyIncome: {
     type: Number,
-    required: true
- },
- transactions: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Transaction'
- }],
- investments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Investment'
- }],
- loans: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Loan'
- }],
- insurance: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Insurance'
- }],
- savings: {
+    required: true,
+  },
+  transactions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Transaction",
+    },
+  ],
+  investments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Investment",
+    },
+  ],
+  loans: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Loan",
+    },
+  ],
+  insurance: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Insurance",
+    },
+  ],
+  savings: {
     type: Number,
     default: 45000,
-    required: false
- },
- bank: {
+    required: false,
+  },
+  bank: {
     type: String,
-    enum: ['Kotak Mahindra', 'SBI', 'HDFC', 'Devopia', 'ICICI'],
-    required: true
- },
- netWorth: {
+    enum: ["Kotak Mahindra", "SBI", "HDFC", "Devopia", "ICICI"],
+    required: true,
+  },
+  netWorth: {
     type: Number,
-    default: 0,
-    required: false
- },
- wealthHealth: {
+    default: 45000,
+    required: false,
+  },
+  wealthHealth: {
     type: String,
     default: "",
-    required: false
- }
+    required: false,
+  },
 });
 
-const User = mongoose.model('User', userSchema, 'users');
+const User = mongoose.model("User", userSchema, "users");
 
 module.exports = User;
