@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const transactionSchema = new Schema({
- type: {
-    type: String,
-    enum: ['inbound', 'outbound'],
-    required: true
- },
  paymentMethod: {
     type: String,
     enum: ['cash', 'card', 'UPI', 'cheque', 'other'],
@@ -16,9 +11,13 @@ const transactionSchema = new Schema({
     type: Date,
     required: true
  },
- peer: {
-    type: String,
-    required: false
+ from: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+ },
+ to: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
  },
  amount: {
     type: Number,
