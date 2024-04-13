@@ -50,10 +50,11 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Insurance'
  }],
-//  savings: {
-//     type: String,
-//     required: true
-//  },
+ savings: {
+    type: Number,
+    default: 45000,
+    required: false
+ },
  bank: {
     type: String,
     enum: ['Kotak Mahindra', 'SBI', 'HDFC', 'Devopia', 'ICICI'],
