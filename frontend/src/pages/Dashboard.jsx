@@ -5,7 +5,7 @@ import Transactions from "../components/Transactions";
 import Investments from "../components/Investments";
 import Loans from "../components/Loans";
 import Insurance from "../components/Insurance";
-
+  
 const Dashboard = () => {
   const [selectedMenu, setSelectedMenu] = useState("Transactions");
 
