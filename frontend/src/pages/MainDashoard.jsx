@@ -6,8 +6,8 @@ import Investments from "../components/Investments";
 import Loans from "../components/Loans";
 import Insurance from "../components/Insurance";
 import AllTransactions from "../components/AllTransactions";
-
-const Dashboard = () => {
+import Dashboard from "../components/Dashboard";
+const MainDashboard = () => {
   const [selectedMenu, setSelectedMenu] = useState("Transactions");
 
   const handleClick = (menuItem) => {
@@ -25,13 +25,14 @@ const Dashboard = () => {
           <Transactions handleClick={handleClick} />
         )}
         {selectedMenu === "Investments" && <Investments />}
+        {selectedMenu === "Dashboard" && <Dashboard />}
         {selectedMenu === "Loans" && <Loans />}
         {selectedMenu === "Insurance" && <Insurance />}
         {selectedMenu === "Inbound" && <AllTransactions type="Inbound" />}
-        {selectedMenu === "Outbound" && <AllTransactions type="OuBound" />}
+        {selectedMenu === "Outbound" && <AllTransactions type="OutBound" />}
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default MainDashboard;
