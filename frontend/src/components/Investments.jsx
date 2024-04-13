@@ -197,25 +197,23 @@ const Investments = () => {
           ))}
         </div>
         <div className="flex w-[30%] h-64 border rounded-lg">
-          <RadialBarChart 
-            width={430} 
-            height={300} 
-            innerRadius="80%" 
-            outerRadius="100%" 
-            data={data2} 
-            startAngle={180} 
-            endAngle={0}
-          >
-            <RadialBar minAngle={15} label={{ fill: '#666', position: 'insideStart',formatter: (value) => `${value} Total`, }} background clockWise={true} dataKey='value'>
-            {
+        <ResponsiveContainer width="100%" height={250}>
+            {/* Render your graph based on selectedInvestment.graphData */}
+            {/* Example: selectedInvestment.graphData*/}
+            {/* <h1>{selectedInvestment ? selectedInvestment.percentage : 'XX%'}</h1> */}
+            <PieChart >
+            <Tooltip contentStyle={{ color: "black" }}/>
+              <Pie data={data1} cx="50%" cy="50%" stroke="transparent" endAngle={180} innerRadius={60} outerRadius={80} paddingAngle={-10} cornerRadius={10} className="border-black">
+                {
                   data1.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={colors[index]} style={{borderRadius: '50%'}}/>
                   ))
                 }
-            </RadialBar>
-            <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='right' align="right" />
-            <Tooltip />
-          </RadialBarChart>
+              </Pie>
+              <Legend iconType='circle' align="bottom" layout="horizontal"  />
+              
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
       </div>
