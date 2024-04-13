@@ -1,4 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import { Tooltip ,ResponsiveContainer,Cell, PieChart, Pie, Legend, Label,ComposedChart,XAxis,YAxis,Area,Bar,BarChart, Line, AreaChart, RadialBarChart, RadialBar} from 'recharts';
+const IndividualInvestment = ({ type , name, date,currentValue,initialValue}) => {
+  return (
+    <div className="border-2 border-primaryGray rounded-lg p-4 mx-auto flex w-full">
+      <div className="flex flex-col gap-x-72 justify-between items-stretch">
+        <div className="flex flex-col w-full">
+        <div className="text-lg font-medium">
+          {name}
+        </div>
+        <div className="text-lg font-medium flex w-full gap-x-96">
+          Type:{type}
+        <div className="text-right text-gray-400">StartDate{date.toLocaleDateString()}</div>
+        </div>
+        </div>
+        <div className="flex flex-row gap-x-96">
+        <div className="col-span-2 text-gray-400 text-lg">CurrentValue: ₹{currentValue}</div>
+        <div className="col-span-2 text-gray-400 text-lg">InitialValue:₹{initialValue}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Investments = () => {
   const [showAll, setShowAll] = useState(false);
@@ -156,7 +178,7 @@ const Investments = () => {
           <h3 className="text-xl font-semibold text-gray-500 pl-4 gap-x-96">All Investments</h3>
           {!showAll && dummyData.length > 2 && (
             <button
-              className="mt-1 mx-auto flex hover:bg-gray-500 text-white border border-gray-500 font-bold py-1 px-4 rounded"
+              className="mt-1 mx-auto flex hover:bg-gray-500 text-gray-500 border border-gray-500 font-bold py-1 px-4 rounded"
               onClick={handleShowMore}
             >
             Show More
