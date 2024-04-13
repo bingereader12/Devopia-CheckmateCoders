@@ -63,6 +63,34 @@ router.get("/details",auth, async (req, res) => {
   }
 });
 
+router.post("/details",auth, async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    // console.log(userId)
+    // Retrieve user details based on userId
+    const user = await User.findById(userId);
+    // console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // // Extract required information
+    // const { netWorth, wealthHealth, savings } = user;
+
+    // // Prepare response
+    // const responseBody = {
+    //   netWorth,
+    //   wealthHealth,
+    //   savings,
+    // };
+
+    // Send response to the client
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
