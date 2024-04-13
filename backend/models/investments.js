@@ -1,7 +1,9 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const investmentSchema = new Schema({
+  userId: ObjectId,
   name: {
     type: String,
     required: true,

@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const userRoutes = require("./routes/api/userRoutes");
 const transactionRoutes = require("./routes/api/transactionRoutes");
+const investmentRoutes = require("./routes/api/investmentRoutes");
 
 const cors = require("cors");
 const app = express();
@@ -21,5 +22,6 @@ mongoose
 
 app.use("/api/transaction", transactionRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/investment", investmentRoutes);
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));

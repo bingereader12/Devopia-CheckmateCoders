@@ -4,6 +4,7 @@ const User = require("../../models/users");
 const Session = require("../../models/sessions");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -51,7 +52,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Invalid email or password password doesnt match" });
 
     const token = jwt.sign({ userId: user._id }, "your_secret_key");
-    const sessionId = uuid.v4();
+    const sessionId = uuidv4();
 
     const existingSession = await Session.findOne({ userId: user._id });
 
