@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,9 +11,45 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(formData);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/students/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      const token = data["x-auth-token"];
+      const sessionId = data["x-session-id"];
+      // console.log(rememberMe)
+
+      Cookies.set("token", token, { expires: 365 }); // Token expires after 365 days
+      // If the user opts to be remembered, store the token persistently
+      if (rememberMe) {
+        Cookies.set("sessionId", sessionId, { expires: 30 });
+      } else {
+        Cookies.set("sessionId", sessionId, { expires: 3 / 24 }); // Session ID expires after 3 hour
+      }
+      const name = Cookies.get("token");
+      // console.log(`cookie data :${name}`);
+      const name1 = Cookies.get("sessionId");
+    }
+    else if (response.status == 400) {
+      Alert("Email and/or password is incorrect");
+    } else {
+      const error = await response.json();
+      console.error(error.message);
+      // Handle error, e.g., show a message to the user
+    }
   };
   return (
     <div className="bg-primaryBlack text-white min-h-screen py-8">
