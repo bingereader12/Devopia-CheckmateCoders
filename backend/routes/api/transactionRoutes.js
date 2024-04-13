@@ -41,7 +41,8 @@ router.post("/outbound", async (req, res) => {
 
 router.post("/transactionDay", async (req, res) => {
   try {
-    const { date, userId } = req.body;
+    const userId = req.user.userId;
+    const { date } = req.body;
     const allTransactions = await Transaction.find({ date });
 
     let inBoundAmount = 0;

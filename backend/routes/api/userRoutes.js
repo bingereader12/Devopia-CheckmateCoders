@@ -5,7 +5,7 @@ const Session = require("../../models/sessions");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
-
+const auth= require( "../../middleware/auth") ; 
 router.post("/signup", async (req, res) => {
   try {
     const { fname, lname, email, password, dob, phone, marital, income, bank } =
@@ -35,29 +35,29 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/user/details", async (req, res) => {
+router.get("/details",auth, async (req, res) => {
   try {
-    const userId = req.body.userId;
-
+    const userId = req.user.userId;
+    console.log(userId)
     // Retrieve user details based on userId
     const user = await User.findById(userId);
-
+    console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Extract required information
-    const { netWorth, wealthHealth, savings } = user;
+    // // Extract required information
+    // const { netWorth, wealthHealth, savings } = user;
 
-    // Prepare response
-    const responseBody = {
-      netWorth,
-      wealthHealth,
-      savings,
-    };
+    // // Prepare response
+    // const responseBody = {
+    //   netWorth,
+    //   wealthHealth,
+    //   savings,
+    // };
 
     // Send response to the client
-    res.status(200).json(responseBody);
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

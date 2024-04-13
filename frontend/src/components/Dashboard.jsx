@@ -21,7 +21,7 @@ import {
   ReferenceLine,
 } from "recharts";
 // import RSSParser from 'rss-parser';
-
+import Cookies from 'js-cookie'
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
@@ -59,24 +59,10 @@ const CustomTooltip1 = ({ active, payload, label }) => {
 };
 
 const Dashboard = () => {
-  const [feedItems, setFeedItems] = useState([]);
-  // const parser = new RSSParser();
-
-  // useEffect(() => {
-  //   // const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'; // Use a CORS proxy to fetch RSS feed data
-
-  //   const fetchFeed = async () => {
-  //     try {
-  //       const feed = await parser.parseURL(`https://www.business-standard.com/rss/finance/personal-finance-10313.rss`);
-  //       console.log(feed);
-  //       setFeedItems(feed.items);
-  //     } catch (error) {
-  //       console.error('Error fetching RSS feed:', error);
-  //     }
-  //   };
-
-  //   fetchFeed();
-  // }, []);
+  const [user, setUser] = useState({});
+  const [balances, setBalances] = useState([]);
+  const [previousDayBalance, setPreviousDayBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
   const data = [
     {
       name: "2024-04-07",
@@ -151,6 +137,64 @@ const Dashboard = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/details`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+        }
+      );
+      const user1 = await res.json();
+      setUser(user1);
+      console.log(user1);
+      } catch (error) {
+        console.error("Error fetching RSS feed:", error);
+      }
+    };
+
+    fetchUserData();
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transactionDay`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+          },
+          body: JSON.stringify({ date: today }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTransactions(data.transactions);
+          setBalances(data.balances);
+          setPreviousDayBalance(data.previousDayBalance);
+          console.log(data);
+        } else {
+          // Handle error response
+          console.error("Error fetching transactions:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactions();
+
+    return () => {};
+  }, []);
+
   const colors = ["#303450", "#ffb800"];
   return (
     <div className="overflow-y-auto h-full no-scrollbar">
@@ -160,7 +204,7 @@ const Dashboard = () => {
             Hello User
           </h1>
           <h1 className="text-3xl font-bold pb-5 text-[#00ff00]">
-            Networth: <span className="text-gray-400">₹100000</span>
+            Networth: <span className="text-gray-400">₹{user.netWorth}</span>
           </h1>
         </div>
         <div className="flex flex-row w-full gap-4">
