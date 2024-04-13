@@ -39,4 +39,32 @@ router.post("/outbound", async (req, res) => {
   }
 });
 
+router.post("/transactionDay", async (req, res) => {
+  try {
+    const { date, userId } = req.body;
+    const allTransactions = await Transaction.find({ date });
+
+    let inBoundAmount = 0;
+    let outBoundAmount = 0;
+    const allInbound = allTransactions.filter(
+      (transaction) => transaction.to == userId
+    );
+    allInbound.forEach((transaction) => {
+      inBoundAmount += transaction.amount;
+    });
+
+    const allOutBound = allTransactions.filter(
+      (transaction) => transaction.from == userId
+    );
+    allOutBound.forEach((transaction) => {
+      outBoundAmount += transaction.amount;
+    });
+
+    return res.status(200).json({ inBoundAmount, outBoundAmount });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
