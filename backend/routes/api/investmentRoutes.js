@@ -7,7 +7,7 @@ router.post("/", async (req, res) => {
   try {
     const { userId, name, type, date, currentValue, initialValue } = req.body;
     const exists = await Investment.findOne({ name });
-    const user = User.findById({ userId });
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(400).json({ message: "User doesnt exist" });
     }
@@ -22,8 +22,8 @@ router.post("/", async (req, res) => {
       currentValue,
       initialValue,
     });
-    const investementRes = await investment.save();
-    if (investementRes) user.investments.push(investementRes._id);
+    const investmentRes = await investment.save();
+    user.investments.push(investmentRes._id);
 
     await user.save();
 
@@ -84,6 +84,10 @@ router.delete("/:id", async (req, res) => {
     if (!deletedInvestment) {
       return res.status(404).json({ message: "Investment not found" });
     }
+
+    const user = await User.findById(userId);
+    user.investments.pull(deletedInvestment._id);
+    await user.save();
 
     return res.status(200).json({ message: "Investment deleted successfully" });
   } catch (error) {

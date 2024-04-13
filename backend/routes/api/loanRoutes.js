@@ -54,7 +54,7 @@ router.delete("/:id", async (req, res) => {
     if (loan.userId != userId) {
       return res
         .status(403)
-        .json({ message: "You are not authorized to access this investment" });
+        .json({ message: "You are not authorized to access this Loan" });
     }
 
     const deletedLoan = await Loan.findByIdAndDelete(loanId);
@@ -62,6 +62,10 @@ router.delete("/:id", async (req, res) => {
     if (!deletedLoan) {
       return res.status(404).json({ message: "Loan not found" });
     }
+
+    const user = await User.findById(userId);
+    user.loans.pull(deletedLoan._id);
+    await user.save();
 
     return res.status(200).json({ message: "Loan deleted successfully" });
   } catch (error) {
