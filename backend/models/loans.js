@@ -1,34 +1,36 @@
-const mongoose = require('mongoose');
+const { ObjectId } = require("mongodb");
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const loanSchema = new Schema({
- name: {
+  userId: ObjectId,
+  name: {
     type: String,
-    required: true
- },
- type: {
+    required: true,
+  },
+  type: {
     type: String,
-    enum: ['home', 'student', 'personal', 'vehicle', 'gold', 'other'],
-    required: true
- },
- startDate: {
+    enum: ["home", "student", "personal", "vehicle", "gold", "other"],
+    required: true,
+  },
+  startDate: {
     type: Date,
-    required: true
- },
-//  endDate: {
-//     type: Date,
-//     required: true
-//  },
- amount: {
+    required: true,
+  },
+  //  endDate: {
+  //     type: Date,
+  //     required: true
+  //  },
+  amount: {
     type: Number,
-    required: true
- },
- rateOfInterest: {
+    required: true,
+  },
+  rateOfInterest: {
     type: Number,
-    required: true
- }
+    required: true,
+  },
 });
 
-const Loan = mongoose.model('Loan', loanSchema, 'loans');
+const Loan = mongoose.model("Loan", loanSchema, "loans");
 
 module.exports = Loan;
