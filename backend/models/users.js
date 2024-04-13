@@ -24,7 +24,7 @@ const userSchema = new Schema({
   },
   familyCode: {
     type: String,
-    required: false
+    required: false,
   },
   dob: {
     type: Date,
