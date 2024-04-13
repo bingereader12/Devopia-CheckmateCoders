@@ -188,7 +188,7 @@ const Investments = () => {
       <div className="flex items-center justify-between mb-10">
         <h1 className="text-primaryYellow text-4xl font-medium">Investments</h1>
         <button
-          className="text-white text-2xl mr-10 border border-primaryGray py-2 px-5 rounded-lg bg-primaryYellow"
+          className="text-black font-bold text-2xl mr-10 border border-primaryGray py-2 px-5 rounded-lg bg-primaryYellow"
           onClick={() => setOpenModal(true)}
         >
           Add Investment
@@ -197,7 +197,7 @@ const Investments = () => {
       </div>
       <div className="flex flex-col w-full gap-4 mt-2">
         <div className="flex flex-row w-full gap-4">
-          <div className="flex flex-col w-[70%] h-fit border rounded-lg py-3">
+          <div className="flex flex-col w-[70%] h-fit border-2 border-[#414141] rounded-lg py-3">
             <div className="flex w-full">
               <h3 className="w-full font-semibold text-lg pl-8 p-2 text-gray-400">
                 Investments growth overtime
@@ -228,7 +228,7 @@ const Investments = () => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-col w-[30%] h-80 border rounded-lg py-3">
+          <div className="flex flex-col w-[30%] h-80 border-2 border-[#414141] rounded-lg py-3">
             <h3 className="font-semibold text-lg text-gray-400 pl-3 flex">
               Investment Balance
             </h3>
@@ -268,7 +268,7 @@ const Investments = () => {
           </div>
         </div>
         <div className="flex flex-row w-full gap-4">
-          <div className="flex flex-col w-[70%] h-auto border rounded-lg">
+          <div className="flex flex-col w-[70%] h-auto border-2 border-[#414141] rounded-lg">
             <div className="flex flex-row justify-between my-2">
               <h3 className="text-xl font-semibold text-[#fff] opacity-60 pl-4 py-1 my-1 mx-2">
                 All Investments
@@ -295,7 +295,7 @@ const Investments = () => {
                 />
               ))}
           </div>
-          <div className="flex w-[30%] h-64 border rounded-lg">
+          <div className="flex w-[30%] h-64 border-2 border-[#414141] rounded-lg">
             <ResponsiveContainer width="100%" height={250}>
               {/* Render your graph based on selectedInvestment.graphData */}
               {/* Example: selectedInvestment.graphData*/}

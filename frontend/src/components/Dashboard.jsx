@@ -58,49 +58,52 @@ const CustomTooltip1 = ({ active, payload, label }) => {
   return null;
 };
 
+const data = [
+  {
+    name: "2024-04-07",
+    uv: 4000,
+    amt: 2400,
+  },
+  {
+    name: "2024-04-08",
+    uv: 3000,
+    amt: 2210,
+  },
+  {
+    name: "2024-04-09",
+    uv: 2000,
+    amt: 2290,
+  },
+  {
+    name: "2024-04-10",
+    uv: 2780,
+    amt: 2000,
+  },
+  {
+    name: "2024-04-11",
+    uv: 1890,
+    amt: 2181,
+  },
+  {
+    name: "2024-04-12",
+    uv: 2390,
+    amt: 2500,
+  },
+  {
+    name: "2024-04-13",
+    uv: 3490,
+    amt: 2100,
+  },
+];
+
 const Dashboard = () => {
   const [user, setUser] = useState({});
   const [balances, setBalances] = useState([]);
+  const [spendings, setSpendings] = useState([{}]);
+  const [cash,setCash] = useState([{},{}])
   const [previousDayBalance, setPreviousDayBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
-  const [pastSevenDaysBalances,setPastSevenDaysBalances] = useState([]);
-  const data = [
-    {
-      name: "2024-04-07",
-      uv: 4000,
-      amt: 2400,
-    },
-    {
-      name: "2024-04-08",
-      uv: 3000,
-      amt: 2210,
-    },
-    {
-      name: "2024-04-09",
-      uv: 2000,
-      amt: 2290,
-    },
-    {
-      name: "2024-04-10",
-      uv: 2780,
-      amt: 2000,
-    },
-    {
-      name: "2024-04-11",
-      uv: 1890,
-      amt: 2181,
-    },
-    {
-      name: "2024-04-12",
-      uv: 2390,
-      amt: 2500,
-    },
-    {
-      name: "2024-04-13",
-      uv: 3490,
-      amt: 2100,
-    },
-  ];
+  const [pastSevenDaysBalances,setPastSevenDaysBalances] = useState([{}]);
 
   data.map((el) => {
     const newD = new Date(el.name);
@@ -163,6 +166,8 @@ const Dashboard = () => {
       const savings = await fetchUserData();
       console.log("savings",savings)
       fetchPastSevenDaysBalances(savings);
+      fetchSpendings()
+      fetchCash()
     }
 
     showGraph()
@@ -205,12 +210,50 @@ const Dashboard = () => {
     return () => {};
   }, []);
 
+  const fetchSpendings = async() => {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/outboundSevenDays`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": Cookies.get("token"),
+        "x-session-id": Cookies.get("sessionId"),
+      }
+    });
+    const data = await response.json()
+    data.map((el) => {
+      const newD = new Date(el.name);
+      el.name = newD.toDateString().substring(4, 10);
+    });
+    setSpendings(data)
+  }
+
+  const fetchCash = async() => {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/cashTrans`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": Cookies.get("token"),
+        "x-session-id": Cookies.get("sessionId"),
+      }
+    });
+    const data = await response.json()
+    console.log(data)
+    setCash([{
+      name: "Cash",
+      value: data.cashSum,
+    },
+    {
+      name: "Cashless",
+      value: data.cashlessSum,
+    }])
+  }
+
   const fetchPastSevenDaysBalances = async (savings) => {
     console.log(savings)
     var previousDayBalance = savings
     var pastSevenDaysBalances1 = []
     // Loop through the last 7 days
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i <= 7; i++) {
       const date2 = new Date(Date.now() - 24*60*60*1000*(i-2));
       const date = new Date(Date.now() - 24*60*60*1000*(i-1));
       // date.setDate();
@@ -236,7 +279,7 @@ const Dashboard = () => {
           console.log(data.inBoundAmount,data.outBoundAmount)
           const balance = previousDayBalance - data.inBoundAmount + data.outBoundAmount;
           console.log(balance)
-          pastSevenDaysBalances1.push({ name: formattedDate, amt: balance });
+          pastSevenDaysBalances1.push({ name: date, amt: balance });
           previousDayBalance = balance
         } else {
           // Handle error response
@@ -279,14 +322,14 @@ const Dashboard = () => {
       <div className="flex flex-col w-full gap-4 mt-2">
         <div className="flex flex-row w-full justify-between">
           <h1 className="text-4xl font-bold pb-5 text-primaryYellow">
-            Hello User
+            Hello {user.fname}
           </h1>
           <h1 className="text-3xl font-bold pb-5 text-[#00ff00]">
             Networth: <span className="text-gray-400">₹{user.netWorth}</span>
           </h1>
         </div>
         <div className="flex flex-row w-full gap-4">
-          <div className="flex flex-col w-[70%] h-fit border rounded-lg py-3">
+          <div className="flex flex-col w-[70%] h-fit border-2 border-[#414141] rounded-lg py-3">
             <div className="flex w-full">
               <h3 className="w-full font-semibold text-lg pl-8 p-2 text-gray-400 pb-5">
                 Balance:{" "}
@@ -317,7 +360,7 @@ const Dashboard = () => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-col w-[30%] border rounded-lg py-3">
+          <div className="flex flex-col w-[30%] border-2 border-[#414141] rounded-lg py-3">
             <h3 className="font-semibold text-lg text-gray-400 pl-3 flex">
               Cash Vs Cashless
             </h3>
@@ -328,17 +371,17 @@ const Dashboard = () => {
               <PieChart>
                 <Tooltip contentStyle={{ color: "black" }} />
                 <Pie
-                  data={data1}
+                  data={cash}
                   cx="50%"
                   cy="50%"
                   stroke="transparent"
                   innerRadius={60}
                   outerRadius={80}
-                  paddingAngle={-2}
+                  paddingAngle={-10}
                   cornerRadius={10}
                   className="border-black"
                 >
-                  {data1.map((entry, index) => (
+                  {cash.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={colors[index]}
@@ -357,7 +400,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex flex-row w-full gap-4">
-          <div className="flex flex-col w-[70%] h-fit border rounded-lg py-3">
+          <div className="flex flex-col w-[70%] h-fit border-2 border-[#414141] rounded-lg py-3">
             <div className="flex w-full">
               <h3 className="w-full font-semibold text-lg pl-8 p-2 text-gray-400 pb-5">
                 Monthly Spending:{" "}
@@ -366,7 +409,7 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart
                 width={730}
-                data={data}
+                data={spendings}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               >
                 <defs>
@@ -380,7 +423,7 @@ const Dashboard = () => {
                 <Tooltip content={<CustomTooltip1 />} />
                 <Area
                   type="monotone"
-                  dataKey="uv"
+                  dataKey="amt"
                   stroke="#ff0000"
                   fillOpacity={1}
                   fill="url(#coloruv)"
@@ -394,14 +437,14 @@ const Dashboard = () => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-col h-80 overflow-y-scroll no-scrollbar w-[30%] border rounded-lg py-3 px-2">
+          <div className="flex flex-col h-[335px] overflow-y-scroll no-scrollbar w-[30%] border-2 border-[#414141] rounded-lg py-3 px-2">
             <h3 className="font-semibold text-lg text-white pl-3 flex mb-1">
               News Feed
             </h3>
             {rssfeed?.map((item, index) => (
               <div
                 key={index}
-                className="border-2 border-primaryGray rounded-lg py-3 px-4 mb-3 bg-primaryBlack transition duration-300"
+                className="border-2 border-[#222222] rounded-lg py-3 px-4 mb-3 bg-primaryBlack transition duration-300"
               >
                 <img
                   src={item.media_content[0].$.url}
@@ -428,7 +471,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex flex-row w-full gap-4">
-          <div className="flex flex-col w-[70%] h-fit border rounded-lg py-3">
+          <div className="flex flex-col w-[70%] h-fit border-2 border-[#414141] rounded-lg py-3">
             <div className="flex w-full">
               <h3 className="w-full font-semibold text-xl pl-4 text-gray-400 pb-5">
                 Today's Transactions
@@ -445,7 +488,7 @@ const Dashboard = () => {
               </span>
             </h3>
           </div>
-          <div className="flex flex-col w-[30%] border rounded-lg py-3">
+          <div className="flex flex-col w-[30%] border-2 border-[#414141] rounded-lg py-3">
             <span className="font-semibold text-lg text-gray-400 pl-3 flex">
               <h3 className="font-semibold text-gray-400 ">
                 Wealth Health: good
