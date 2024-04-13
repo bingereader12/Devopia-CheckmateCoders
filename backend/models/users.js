@@ -2,13 +2,38 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
- fname: String,
- lname: String,
- email: String,
- phone: String,
- dob: Date,
- maritalStatus: String,
- avgMonthlyIncome: Number,
+ fname: {
+    type: String,
+    required: true
+ },
+ lname: {
+    type: String,
+    required: true
+ },
+ email: {
+    type: String,
+    required: true
+ },
+ phone: {
+    type: String,
+    required: true
+ },
+ password: {
+    type: String,
+    required: true
+ },
+ dob: {
+    type: Date,
+    required: true
+ },
+ maritalStatus: {
+    type: String,
+    required: true
+ },
+ avgMonthlyIncome: {
+    type: Number,
+    required: true
+ },
  transactions: [{
     type: Schema.Types.ObjectId,
     ref: 'Transaction'
@@ -25,9 +50,20 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Insurance'
  }],
- savings: Number,
- netWorth: Number,
- wealthHealth: String
+ savings: {
+    type: String,
+    required: true
+ },
+ netWorth: {
+    type: Number,
+    default: 0,
+    required: false
+ },
+ wealthHealth: {
+    type: String,
+    default: "",
+    required: false
+ }
 });
 
 const User = mongoose.model('User', userSchema, 'users');
