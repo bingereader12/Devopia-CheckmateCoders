@@ -38,10 +38,10 @@ router.post("/signup", async (req, res) => {
 router.get("/details",auth, async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log(userId)
+    // console.log(userId)
     // Retrieve user details based on userId
     const user = await User.findById(userId);
-    console.log(user);
+    // console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

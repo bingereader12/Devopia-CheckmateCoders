@@ -63,7 +63,7 @@ const Dashboard = () => {
   const [balances, setBalances] = useState([]);
   const [previousDayBalance, setPreviousDayBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
-  const pastSevenDaysBalances = [];
+  const [pastSevenDaysBalances,setPastSevenDaysBalances] = useState([]);
   const data = [
     {
       name: "2024-04-07",
@@ -152,13 +152,20 @@ const Dashboard = () => {
       );
       const user1 = await res.json();
       setUser(user1);
+      return user1.savings;
       console.log(user1);
       } catch (error) {
         console.error("Error fetching RSS feed:", error);
       }
     };
 
-    fetchUserData();
+    const showGraph = async() => {
+      const savings = await fetchUserData();
+      console.log("savings",savings)
+      fetchPastSevenDaysBalances(savings);
+    }
+
+    showGraph()
 
     return () => {};
   }, []);
@@ -198,19 +205,21 @@ const Dashboard = () => {
     return () => {};
   }, []);
 
-  const fetchPastSevenDaysBalances = async () => {
-  
+  const fetchPastSevenDaysBalances = async (savings) => {
+    console.log(savings)
+    var previousDayBalance = savings
+    var pastSevenDaysBalances1 = []
     // Loop through the last 7 days
     for (let i = 0; i < 7; i++) {
-      const date2 = new Date(Date.now() - 24*60*60*1000*(i-1));
-      const date = new Date(Date.now() - 24*60*60*1000*i);
+      const date2 = new Date(Date.now() - 24*60*60*1000*(i-2));
+      const date = new Date(Date.now() - 24*60*60*1000*(i-1));
       // date.setDate();
       console.log(date)
       
       try {
         const formattedDate = date.toISOString();
         console.log(formattedDate)
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionday`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionSevenDays`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -222,8 +231,13 @@ const Dashboard = () => {
   
         if (response.ok) {
           const data = await response.json();
-          const balance = calculateBalance(data.transactions, data.previousDayBalance);
-          pastSevenDaysBalances.push({ date: formattedDate, balance });
+          console.log(data)
+          // const balance = calculateBalance(data.transactions, data.previousDayBalance);
+          console.log(data.inBoundAmount,data.outBoundAmount)
+          const balance = previousDayBalance - data.inBoundAmount + data.outBoundAmount;
+          console.log(balance)
+          pastSevenDaysBalances1.push({ name: formattedDate, amt: balance });
+          previousDayBalance = balance
         } else {
           // Handle error response
           console.error(`Error fetching transactions for : ${response.statusText}`);
@@ -232,6 +246,12 @@ const Dashboard = () => {
         console.error(`Error fetching transactions for ${error}`);
       }
     }
+    pastSevenDaysBalances1.map((el) => {
+      const newD = new Date(el.name);
+      el.name = newD.toDateString().substring(4, 10);
+    });
+    pastSevenDaysBalances1.reverse()
+    setPastSevenDaysBalances(pastSevenDaysBalances1)
   
     // Now pastSevenDaysBalances contains balances for the last 7 days
     console.log("Past 7 days balances:", pastSevenDaysBalances);
@@ -251,10 +271,6 @@ const Dashboard = () => {
   
     return previousDayBalance + inboundAmount - outboundAmount;
   };
-
-  useEffect(()=>{
-    fetchPastSevenDaysBalances();
-  },[])
   
 
   const colors = ["#303450", "#ffb800"];
@@ -279,7 +295,7 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart
                 width={730}
-                data={data}
+                data={pastSevenDaysBalances}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               >
                 <defs>
@@ -293,7 +309,7 @@ const Dashboard = () => {
                 <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
-                  dataKey="uv"
+                  dataKey="amt"
                   stroke="#00d1fe"
                   fillOpacity={1}
                   fill="url(#colorUv)"

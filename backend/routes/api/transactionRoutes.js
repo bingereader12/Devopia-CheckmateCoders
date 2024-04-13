@@ -70,7 +70,7 @@ router.post("/transactionDay", auth, async (req, res) => {
 });
 
 
-router.post("/transactionday", auth, async (req, res) => {
+router.post("/transactionSevenDays", auth, async (req, res) => {
   try {
     const userId = req.user.userId;
     const { date, date1 } = req.body;
@@ -81,6 +81,7 @@ router.post("/transactionday", auth, async (req, res) => {
         $lt: new Date(date1)
     }
      });
+     console.log(allTransactions)
 
     let inBoundAmount = 0;
     let outBoundAmount = 0;
