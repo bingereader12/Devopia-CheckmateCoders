@@ -20,8 +20,8 @@ const Sidebar = ({ handleClick }) => {
     handleClick(item.name);
   };
   return (
-    <div className="w-72 h-full flex flex-col gap-10 text-center p-2 cursor-pointer bg-[#161616] ronuded-lg">
-      <h1 className="text-xl font-bold">Finance App</h1>
+    <div className="w-96 pl-8 h-full flex flex-col gap-10 text-center p-2 cursor-pointer bg-[#161616] ronuded-lg">
+      <h1 className="text-xl font-bold text-primaryYellow">Finance App</h1>
       <div className="flex flex-col gap-5">
         {menu.map((item, index) => {
           const isActive = item.name === activeTab;

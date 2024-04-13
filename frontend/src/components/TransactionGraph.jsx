@@ -57,7 +57,7 @@ const data = [
 export default function TransactionGraph() {
   return (
     <LineChart width={800} height={400} data={data}>
-      <CartesianGrid strokeDasharray="3 3" />
+      {/* <CartesianGrid strokeDasharray="3 3" /> */}
       <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
       <YAxis />
       <Tooltip />
