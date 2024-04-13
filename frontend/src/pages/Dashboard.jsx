@@ -5,7 +5,8 @@ import Transactions from "../components/Transactions";
 import Investments from "../components/Investments";
 import Loans from "../components/Loans";
 import Insurance from "../components/Insurance";
-  
+import AllTransactions from "../components/AllTransactions";
+
 const Dashboard = () => {
   const [selectedMenu, setSelectedMenu] = useState("Transactions");
 
@@ -13,17 +14,21 @@ const Dashboard = () => {
     setSelectedMenu(menuItem);
   };
 
-  console.log(selectedMenu);
+  //   console.log(selectedMenu);
 
   return (
     <div className="h-screen flex bg-primaryBlack text-white">
       <Sidebar handleClick={handleClick} />
       <div className="w-full p-8">
         {selectedMenu === "Savings" && <Savings />}
-        {selectedMenu === "Transactions" && <Transactions />}
+        {selectedMenu === "Transactions" && (
+          <Transactions handleClick={handleClick} />
+        )}
         {selectedMenu === "Investments" && <Investments />}
         {selectedMenu === "Loans" && <Loans />}
         {selectedMenu === "Insurance" && <Insurance />}
+        {selectedMenu === "Inbound" && <AllTransactions type="Inbound" />}
+        {selectedMenu === "Outbound" && <AllTransactions type="OuBound" />}
       </div>
     </div>
   );

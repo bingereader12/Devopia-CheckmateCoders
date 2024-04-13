@@ -1,7 +1,7 @@
 import React from "react";
 import IndividualTransaction from "./IndividualTransaction";
 
-const TransactionSection = ({ type }) => {
+const TransactionSection = ({ type, handleClick }) => {
   return (
     <div className="border border-primaryGray rounded-lg">
       <span className="text-4xl border-b border-primaryGray p-4 flex items-center">
@@ -22,7 +22,12 @@ const TransactionSection = ({ type }) => {
         <span>
           <IndividualTransaction type={type} />
         </span>
-        <span className="text-gray-400 cursor-pointer px-1">See More</span>
+        <span
+          className="text-gray-400 cursor-pointer px-1"
+          onClick={() => handleClick(type)}
+        >
+          See More
+        </span>
       </div>
     </div>
   );

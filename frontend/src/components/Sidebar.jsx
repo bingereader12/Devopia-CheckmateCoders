@@ -21,7 +21,7 @@ const Sidebar = ({ handleClick }) => {
   };
   return (
     <div className="w-96 pl-8 h-full flex flex-col gap-10 text-center p-2 cursor-pointer bg-[#161616] ronuded-lg">
-      <h1 className="text-xl font-bold text-primaryYellow">Finance App</h1>
+      <h1 className="text-3xl font-bold text-primaryYellow">Finance App</h1>
       <div className="flex flex-col gap-5">
         {menu.map((item, index) => {
           const isActive = item.name === activeTab;
@@ -35,7 +35,7 @@ const Sidebar = ({ handleClick }) => {
                   : "text-gray-400"
               }`}
             >
-              <img src={item.icon} alt="icon" className="h-5 w-5 mr-3" />
+              <img src={item.icon} alt="icon" className="h-5 w-5 mr-3 mt-1" />
               {item.name}
             </span>
           );
