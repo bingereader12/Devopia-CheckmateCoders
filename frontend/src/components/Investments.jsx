@@ -1,22 +1,34 @@
 import React, { useState } from "react";
 import { Tooltip ,ResponsiveContainer,Cell, PieChart, Pie, Legend, Label,ComposedChart,XAxis,YAxis,Area,Bar,BarChart, Line, AreaChart, RadialBarChart, RadialBar} from 'recharts';
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-primaryBlack p-3 rounded-md text-center">
+        <p className="text-[#ffffff] opacity-50">{`${label}`}</p>
+        <p className={`text-[#FFB800] opacity-90`}>Inbound: {`${payload[0].value}`}</p>
+        {/* <p className={`text-[#ff0000] ${payload[0].value>=payload[1].value && "opacity-50"}`}>Outbound: {`${payload[1].value}`}</p> */}
+        {/* <p className="intro">{getIntroOfPage(label)}</p> */}
+        {/* <p className="desc">Anything you want can be displayed here.</p> */}
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const IndividualInvestment = ({ type , name, date,currentValue,initialValue}) => {
   return (
-    <div className="border-2 border-primaryGray rounded-lg p-4 mx-auto flex w-full">
-      <div className="flex flex-col gap-x-72 justify-between items-stretch">
+    <div className="border-t-2 border-primaryGray p-4 mx-auto flex w-full">
         <div className="flex flex-col w-full">
-        <div className="text-lg font-medium">
-          {name}
-        </div>
-        <div className="text-lg font-medium flex w-full gap-x-96">
-          Type:{type}
-        <div className="text-right text-gray-400">StartDate{date.toLocaleDateString()}</div>
-        </div>
-        </div>
-        <div className="flex flex-row gap-x-96">
-        <div className="col-span-2 text-gray-400 text-lg">CurrentValue: ₹{currentValue}</div>
-        <div className="col-span-2 text-gray-400 text-lg">InitialValue:₹{initialValue}</div>
-        </div>
+          <div className="font-medium flex justify-between mb-1 align-text-bottom">
+            <div><span className="opacity-80 text-xl">{name}</span> <span className="opacity-40 text-md">(Type: {type})</span></div>
+            <div className="text-right text-[#fff] opacity-60 text-lg font-medium">Start Date: {date.toLocaleDateString()}</div>
+          </div>
+          <div className="flex justify-between">
+            <div className={`col-span-2 opacity-80 text-lg ${currentValue>initialValue ? "text-[#00ff00]" : "text-[#ff0000]"}`}>Current Value: ₹{currentValue}</div>
+            <div className="col-span-2 text-[#fff] opacity-60 text-lg font-medium">Initial Value: ₹{initialValue}</div>
+          </div>
       </div>
     </div>
   );
@@ -67,37 +79,37 @@ const Investments = () => {
   ];
   const data = [
     {
-      "name": "Page A",
+      name: "2024-04-07",
       "uv": 4000,
       "amt": 2400
     },
     {
-      "name": "Page B",
+      name: "2024-04-08",
       "uv": 3000,
       "amt": 2210
     },
     {
-      "name": "Page C",
+      name: "2024-04-09",
       "uv": 2000,
       "amt": 2290
     },
     {
-      "name": "Page D",
+      name: "2024-04-10",
       "uv": 2780,
       "amt": 2000
     },
     {
-      "name": "Page E",
+      name: "2024-04-11",
       "uv": 1890,
       "amt": 2181
     },
     {
-      "name": "Page F",
+      name: "2024-04-12",
       "uv": 2390,
       "amt": 2500
     },
     {
-      "name": "Page G",
+      name: "2024-04-13",
       "uv": 3490,
       "amt": 2100
     }
@@ -116,6 +128,11 @@ const Investments = () => {
       "value":  2000
     },
   ];
+
+  data.map((el)=>{
+    const newD = new Date(el.name);
+    el.name = newD.toDateString().substring(4,10)
+  })
 
   const data2 =[ 
       {
@@ -146,7 +163,7 @@ const Investments = () => {
           </defs >
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Area type="monotone" dataKey="uv" stroke="#FFB800" fillOpacity={1} fill="url(#colorUv)" />
         </AreaChart>
         </ResponsiveContainer>
@@ -174,11 +191,11 @@ const Investments = () => {
       </div>
       <div className="flex flex-row w-full gap-4">
         <div className="flex flex-col w-[70%] h-auto border rounded-lg">
-          <div className="flex flex-row justify-between">
-          <h3 className="text-xl font-semibold text-gray-500 pl-4 gap-x-96">All Investments</h3>
+          <div className="flex flex-row justify-between my-2">
+          <h3 className="text-xl font-semibold text-[#fff] opacity-60 pl-4 py-1 my-1 mx-2">All Investments</h3>
           {!showAll && dummyData.length > 2 && (
             <button
-              className="mt-1 mx-auto flex hover:bg-gray-500 text-gray-500 border border-gray-500 font-bold py-1 px-4 rounded"
+              className="my-1 mr-4 flex hover:border-[#666] text-[#666666] border border-[#333] font-bold py-1 px-4 rounded"
               onClick={handleShowMore}
             >
             Show More
