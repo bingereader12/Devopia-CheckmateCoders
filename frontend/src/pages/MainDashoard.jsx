@@ -6,14 +6,13 @@ import Loans from "../components/Loans";
 import Insurance from "../components/Insurance";
 import AllTransactions from "../components/AllTransactions";
 import Dashboard from "../components/Dashboard";
+import FamilyExpense from "../components/FamilyExpense";
 const MainDashboard = () => {
   const [selectedMenu, setSelectedMenu] = useState("Dashboard");
 
   const handleClick = (menuItem) => {
     setSelectedMenu(menuItem);
   };
-
-  //   console.log(selectedMenu);
 
   return (
     <div className="h-screen flex bg-primaryBlack text-white">
@@ -28,6 +27,7 @@ const MainDashboard = () => {
         {selectedMenu === "Insurance" && <Insurance />}
         {selectedMenu === "Inbound" && <AllTransactions type="Inbound" />}
         {selectedMenu === "Outbound" && <AllTransactions type="OutBound" />}
+        {selectedMenu === "Family Expenses" && <FamilyExpense />}
       </div>
     </div>
   );
