@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Investment = require("../../models/investments");
 const User = require("../../models/users");
+const yahooFinance = require('yahoo-finance2').default; 
 
 router.post("/", async (req, res) => {
   try {
@@ -42,6 +43,33 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get("/risk", async(req, res) => {
+  const results = await yahooFinance.quote('AAPL');
+
+  function normalize(value, min, max) {
+    return (value - min) / (max - min);
+   }
+   
+   function calculateRiskScore(data) {
+    // Normalize metrics
+    const priceChangeNormalized = normalize(data.regularMarketChangePercent, -100, 100);
+    const volumeNormalized = normalize(data.regularMarketVolume, 0, 1000000000); // Assuming a maximum volume of 1 billion
+    const peRatioNormalized = normalize(data.trailingPE, 0, 100); // Assuming a maximum PE ratio of 100
+    const marketCapNormalized = normalize(data.marketCap, 0, 1000000000000); // Assuming a maximum market cap of 1 trillion
+    const epsNormalized = normalize(data.epsTrailingTwelveMonths, 0, 10); // Assuming a maximum EPS of 10
+   
+    // Calculate risk score
+    const riskScore = (priceChangeNormalized + volumeNormalized + peRatioNormalized + marketCapNormalized + epsNormalized) / 5;
+   
+    return riskScore;
+   }
+   
+   const riskScore = calculateRiskScore(results);
+   console.log(`Risk Score: ${riskScore}`);
+
+  res.status(200).json(riskScore)
+})
 
 router.get("/:id", async (req, res) => {
   try {
@@ -94,5 +122,6 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 module.exports = router;

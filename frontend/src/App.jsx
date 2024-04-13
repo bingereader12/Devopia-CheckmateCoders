@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import RiskScoreDemo from "./pages/RiskScoreDemo";
 import MainDashoard from "./pages/MainDashoard";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -9,6 +10,7 @@ const App = () => {
     <div className="bg-white min-h-screen">
       <Routes>
         <Route path="/dashboard" element={<MainDashoard />} />
+        <Route path="/risk" element={<RiskScoreDemo />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
