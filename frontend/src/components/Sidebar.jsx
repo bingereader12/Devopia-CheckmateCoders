@@ -1,41 +1,24 @@
-import {React,useState} from 'react'
-import { NavLink } from 'react-router-dom';
-// import { RiHome5Fill,RiHome5Line } from "react-icons/ri";
-// import { IoDocuments,IoDocumentsOutline,IoSettings,IoSettingsOutline } from "react-icons/io5";
-// import { MdExplore,MdOutlineExplore  } from "react-icons/md";
-const Sidebar = () => {
-  const [activeLink, setActiveLink] = useState(0);
+import React from "react";
 
-  const handleLinkClick = (index) => {
-    setActiveLink(index);
-  };
+const Sidebar = ({ handleClick }) => {
+  const menu = ["Savings", "Transactions", "Investments", "Loans", "Insurance"];
   return (
-    <div className='flex flex-col w-full h-full gap-10 place-items-center'>
-      <h3 className='text-xl font-semibold'>Internship Portal</h3>
-      <div className='flex flex-col gap-6 text-justify font-semibold'>
-        <NavLink to="/dashboard" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
-          <button className='flex flex-row gap-2'>
-          {/* {activeLink ? <RiHome5Fill style={{fontSize: 22}}/> : <RiHome5Line style={{fontSize: 22}}/>}Dashboard */}Dashboard
-          </button>
-        </NavLink>
-        <NavLink to="/savings" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
-          <button className='flex flex-row gap-2'>
-          {/* {activeLink ? <IoDocuments style={{fontSize: 22}}/> : <IoDocumentsOutline style={{fontSize: 22}}/>}Myinternships */}savings
-          </button>
-        </NavLink>
-        <NavLink to="/transcations" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
-          <button className='flex flex-row gap-2'>
-          {/* {activeLink ? <MdExplore style={{fontSize: 22}}/> : <MdOutlineExplore style={{fontSize: 22}}/>}Explore */}transcations
-          </button>
-        </NavLink>
-        <NavLink to="/investment" className={`link ${activeLink ? 'active' : ''}`} onClick={() => handleLinkClick(0)}>
-          <button className='flex flex-row gap-2'>
-          {/* {activeLink ? <IoSettings style={{fontSize: 22}}/> : <IoSettingsOutline style={{fontSize: 22}}/>}Settings */}investment
-          </button>
-        </NavLink>
+    <div className="w-72 border h-full flex flex-col gap-10 text-center p-2">
+      <h1>Finance App</h1>
+      <div className="flex flex-col gap-5">
+        {menu.map((item) => {
+          return (
+            <span
+              onClick={() => handleClick(item)}
+              className="p-2 text-lg border"
+            >
+              {item}
+            </span>
+          );
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
