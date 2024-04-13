@@ -8,7 +8,7 @@ import Insurance from "../components/Insurance";
 import AllTransactions from "../components/AllTransactions";
 import Dashboard from "../components/Dashboard";
 const MainDashboard = () => {
-  const [selectedMenu, setSelectedMenu] = useState("Transactions");
+  const [selectedMenu, setSelectedMenu] = useState("Dashboard");
 
   const handleClick = (menuItem) => {
     setSelectedMenu(menuItem);
