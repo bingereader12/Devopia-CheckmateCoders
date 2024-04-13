@@ -10,10 +10,9 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     dob: "",
-    maritalStatus: "",
-    avgMonthlyIncome: "",
+    marital: "",
+    income: "",
     bank: "",
-    accountId: "",
   });
 
   const handleChange = (e) => {
@@ -28,9 +27,30 @@ const Signup = () => {
     setPage(page - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(formData);
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/user/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (response.ok) {
+      window.location.href = "/login";
+    }
+    else if (response.status == 400) {
+      alert("Email and/or password is incorrect");
+    } else {
+      const error = await response.json();
+      console.error(error.message);
+      // Handle error, e.g., show a message to the user
+    }
   };
 
   return (
@@ -145,13 +165,13 @@ const Signup = () => {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-white placeholder:text-white outline-none bg-black"
               />
-              <label htmlFor="maritalStatus" className="block mb-1">
+              <label htmlFor="marital" className="block mb-1">
                 Marital Status:
               </label>
               <select
-                id="maritalStatus"
-                name="maritalStatus"
-                value={formData.maritalStatus}
+                id="marital"
+                name="marital"
+                defaultValue={formData.marital}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-white placeholder:text-white outline-none bg-black"
               >
@@ -164,10 +184,10 @@ const Signup = () => {
               </label>
               <input
                 type="text"
-                id="avgMonthlyIncome"
+                id="income"
                 placeholder="Avg. Monthly Income"
-                name="avgMonthlyIncome"
-                value={formData.avgMonthlyIncome}
+                name="income"
+                value={formData.income}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-white placeholder:text-white outline-none bg-black"
               />
@@ -182,22 +202,10 @@ const Signup = () => {
                 className="w-full border border-gray-300 rounded px-3 py-2 text-white placeholder:text-white outline-none bg-black"
               >
                 <option value="">Select Bank</option>
-                <option value="bank1">Bank 1</option>
-                <option value="bank2">Bank 2</option>
-                <option value="bank3">Bank 3</option>
+                <option value="Kotak Mahindra">Kotak Mahindra</option>
+                <option value="SBI">SBI</option>
+                <option value="HDFC">HDFC</option>
               </select>
-              <label htmlFor="accountId" className="block mb-1">
-                Account ID:
-              </label>
-              <input
-                type="text"
-                id="accountId"
-                name="accountId"
-                placeholder="Account ID"
-                value={formData.accountId}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2 text-white placeholder:text-white outline-none bg-black"
-              />
             </div>
 
             <button

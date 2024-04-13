@@ -21,7 +21,7 @@ import {
   ReferenceLine,
 } from "recharts";
 // import RSSParser from 'rss-parser';
-
+import Cookies from 'js-cookie'
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
@@ -59,24 +59,11 @@ const CustomTooltip1 = ({ active, payload, label }) => {
 };
 
 const Dashboard = () => {
-  const [feedItems, setFeedItems] = useState([]);
-  // const parser = new RSSParser();
-
-  // useEffect(() => {
-  //   // const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'; // Use a CORS proxy to fetch RSS feed data
-
-  //   const fetchFeed = async () => {
-  //     try {
-  //       const feed = await parser.parseURL(`https://www.business-standard.com/rss/finance/personal-finance-10313.rss`);
-  //       console.log(feed);
-  //       setFeedItems(feed.items);
-  //     } catch (error) {
-  //       console.error('Error fetching RSS feed:', error);
-  //     }
-  //   };
-
-  //   fetchFeed();
-  // }, []);
+  const [user, setUser] = useState({});
+  const [balances, setBalances] = useState([]);
+  const [previousDayBalance, setPreviousDayBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  const pastSevenDaysBalances = [];
   const data = [
     {
       name: "2024-04-07",
@@ -151,6 +138,125 @@ const Dashboard = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/details`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+        }
+      );
+      const user1 = await res.json();
+      setUser(user1);
+      console.log(user1);
+      } catch (error) {
+        console.error("Error fetching RSS feed:", error);
+      }
+    };
+
+    fetchUserData();
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const date1 = new Date().toISOString();
+        console.log(date1);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionDay`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({ date: date1 }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTransactions(data.transactions);
+          setBalances(data.balances);
+          setPreviousDayBalance(data.previousDayBalance);
+          console.log(data);
+        } else {
+          // Handle error response
+          console.error("Error fetching transactions:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactions();
+
+    return () => {};
+  }, []);
+
+  const fetchPastSevenDaysBalances = async () => {
+  
+    // Loop through the last 7 days
+    for (let i = 0; i < 7; i++) {
+      const date2 = new Date(Date.now() - 24*60*60*1000*(i-1));
+      const date = new Date(Date.now() - 24*60*60*1000*i);
+      // date.setDate();
+      console.log(date)
+      
+      try {
+        const formattedDate = date.toISOString();
+        console.log(formattedDate)
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionday`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({ date: formattedDate ,date1: date2}),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          const balance = calculateBalance(data.transactions, data.previousDayBalance);
+          pastSevenDaysBalances.push({ date: formattedDate, balance });
+        } else {
+          // Handle error response
+          console.error(`Error fetching transactions for : ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching transactions for ${error}`);
+      }
+    }
+  
+    // Now pastSevenDaysBalances contains balances for the last 7 days
+    console.log("Past 7 days balances:", pastSevenDaysBalances);
+  };
+  
+  const calculateBalance = (transactions, previousDayBalance) => {
+    let inboundAmount = 0;
+    let outboundAmount = 0;
+  
+    transactions.forEach(transaction => {
+      if (transaction.to === userId) {
+        inboundAmount += transaction.amount;
+      } else if (transaction.from === userId) {
+        outboundAmount += transaction.amount;
+      }
+    });
+  
+    return previousDayBalance + inboundAmount - outboundAmount;
+  };
+
+  useEffect(()=>{
+    fetchPastSevenDaysBalances();
+  },[])
+  
+
   const colors = ["#303450", "#ffb800"];
   return (
     <div className="overflow-y-auto h-full no-scrollbar">
@@ -160,7 +266,7 @@ const Dashboard = () => {
             Hello User
           </h1>
           <h1 className="text-3xl font-bold pb-5 text-[#00ff00]">
-            Networth: <span className="text-gray-400">₹100000</span>
+            Networth: <span className="text-gray-400">₹{user.netWorth}</span>
           </h1>
         </div>
         <div className="flex flex-row w-full gap-4">

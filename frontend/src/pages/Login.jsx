@@ -13,16 +13,17 @@ const Login = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log(formData.email);
+    console.log(formData.password);
 
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/students/login`,
+      `${import.meta.env.VITE_BACKEND_URL}/user/login`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
       }
     );
 
@@ -34,14 +35,12 @@ const Login = () => {
 
       Cookies.set("token", token, { expires: 365 }); // Token expires after 365 days
       // If the user opts to be remembered, store the token persistently
-      if (rememberMe) {
-        Cookies.set("sessionId", sessionId, { expires: 30 });
-      } else {
-        Cookies.set("sessionId", sessionId, { expires: 3 / 24 }); // Session ID expires after 3 hour
-      }
+      Cookies.set("sessionId", sessionId, { expires: 30 });
+
       const name = Cookies.get("token");
       // console.log(`cookie data :${name}`);
       const name1 = Cookies.get("sessionId");
+      window.location.href = "/dashboard";
     }
     else if (response.status == 400) {
       Alert("Email and/or password is incorrect");

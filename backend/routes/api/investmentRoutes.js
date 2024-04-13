@@ -3,10 +3,12 @@ const router = express.Router();
 const Investment = require("../../models/investments");
 const User = require("../../models/users");
 const yahooFinance = require('yahoo-finance2').default; 
+const auth= require( "../../middleware/auth") ; 
 
-router.post("/", async (req, res) => {
+router.post("/",auth, async (req, res) => {
   try {
-    const { userId, name, type, date, currentValue, initialValue } = req.body;
+    const userId = req.user.userId;
+    const { name, type, date, currentValue, initialValue } = req.body;
     const exists = await Investment.findOne({ name });
     const user = await User.findById(userId);
     if (!user) {
@@ -34,9 +36,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/",auth, async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.user.userId;
     const investments = await Investment.find({ userId });
     return res.status(400).json({ message: investments });
   } catch (error) {
@@ -44,7 +46,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/risk", async(req, res) => {
+router.get("/risk",auth, async(req, res) => {
   const results = await yahooFinance.quote('AAPL');
 
   function normalize(value, min, max) {
@@ -71,10 +73,10 @@ router.get("/risk", async(req, res) => {
   res.status(200).json(riskScore)
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",auth, async (req, res) => {
   try {
     const investmentId = req.params.id;
-    const userId = req.body.userId;
+    const userId = req.user.userId;
     const investment = await Investment.findById(investmentId);
     if (!investment) {
       return res.status(404).json({ message: "Investment not found" });
@@ -92,10 +94,10 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",auth, async (req, res) => {
   try {
     const investmentId = req.params.id;
-    const userId = req.body.userId;
+    const userId = req.user.userId;
     const investment = await Investment.findById(investmentId);
     if (!investment) {
       return res.status(404).json({ message: "Investment not found" });

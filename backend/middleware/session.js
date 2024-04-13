@@ -1,5 +1,5 @@
 // session id token if needed
-const Session = require("../models/sessionModel");
+const Session = require("../models/sessions");
 module.exports = async function validateSession(req, res, next) {
     const sessionId = req.headers['x-session-id'];
 
