@@ -8,7 +8,7 @@ const insuranceSchema = new Schema({
  },
  type: {
     type: String,
-    enum: ['property', 'health', 'life', 'vehicle', 'general', 'other'],
+    enum: ['property', 'health', 'life', 'vehicle', 'other'],
     required: true
  },
  startDate: {
