@@ -22,6 +22,7 @@ const TransactionSection = ({ type }) => {
         <span>
           <IndividualTransaction type={type} />
         </span>
+        <span className="text-gray-400 cursor-pointer px-1">See More</span>
       </div>
     </div>
   );
