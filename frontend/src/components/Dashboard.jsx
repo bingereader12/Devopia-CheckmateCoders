@@ -63,6 +63,7 @@ const Dashboard = () => {
   const [balances, setBalances] = useState([]);
   const [previousDayBalance, setPreviousDayBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
+  const pastSevenDaysBalances = [];
   const data = [
     {
       name: "2024-04-07",
@@ -165,14 +166,16 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const today = new Date().toISOString().split('T')[0];
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transactionDay`, {
+        const date1 = new Date().toISOString();
+        console.log(date1);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionDay`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
           },
-          body: JSON.stringify({ date: today }),
+          body: JSON.stringify({ date: date1 }),
         });
 
         if (response.ok) {
@@ -194,6 +197,65 @@ const Dashboard = () => {
 
     return () => {};
   }, []);
+
+  const fetchPastSevenDaysBalances = async () => {
+  
+    // Loop through the last 7 days
+    for (let i = 0; i < 7; i++) {
+      const date2 = new Date(Date.now() - 24*60*60*1000*(i-1));
+      const date = new Date(Date.now() - 24*60*60*1000*i);
+      // date.setDate();
+      console.log(date)
+      
+      try {
+        const formattedDate = date.toISOString();
+        console.log(formattedDate)
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionday`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({ date: formattedDate ,date1: date2}),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          const balance = calculateBalance(data.transactions, data.previousDayBalance);
+          pastSevenDaysBalances.push({ date: formattedDate, balance });
+        } else {
+          // Handle error response
+          console.error(`Error fetching transactions for : ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching transactions for ${error}`);
+      }
+    }
+  
+    // Now pastSevenDaysBalances contains balances for the last 7 days
+    console.log("Past 7 days balances:", pastSevenDaysBalances);
+  };
+  
+  const calculateBalance = (transactions, previousDayBalance) => {
+    let inboundAmount = 0;
+    let outboundAmount = 0;
+  
+    transactions.forEach(transaction => {
+      if (transaction.to === userId) {
+        inboundAmount += transaction.amount;
+      } else if (transaction.from === userId) {
+        outboundAmount += transaction.amount;
+      }
+    });
+  
+    return previousDayBalance + inboundAmount - outboundAmount;
+  };
+
+  useEffect(()=>{
+    fetchPastSevenDaysBalances();
+  },[])
+  
 
   const colors = ["#303450", "#ffb800"];
   return (
