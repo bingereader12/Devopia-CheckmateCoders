@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
-import Savings from "../components/Savings";
 import Transactions from "../components/Transactions";
 import Investments from "../components/Investments";
 import Loans from "../components/Loans";
@@ -20,7 +19,6 @@ const MainDashboard = () => {
     <div className="h-screen flex bg-primaryBlack text-white">
       <Sidebar handleClick={handleClick} />
       <div className="w-full p-8">
-        {selectedMenu === "Savings" && <Savings />}
         {selectedMenu === "Transactions" && (
           <Transactions handleClick={handleClick} />
         )}

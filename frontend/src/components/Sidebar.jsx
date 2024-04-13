@@ -8,13 +8,12 @@ import insuranceIcon from "../../public/icons/folder.svg";
 const Sidebar = ({ handleClick }) => {
   const menu = [
     { name: "Dashboard", icon: savingsIcon },
-    { name: "Savings", icon: savingsIcon },
     { name: "Transactions", icon: transactionsIcon },
     { name: "Investments", icon: investmentsIcon },
     { name: "Loans", icon: loansIcon },
     { name: "Insurance", icon: insuranceIcon },
   ];
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("Dashboard");
 
   const handleTabClick = (item) => {
     setActiveTab(item.name);
