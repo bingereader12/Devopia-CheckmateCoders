@@ -28,6 +28,7 @@ const userSchema = new Schema({
  },
  maritalStatus: {
     type: String,
+    enum: ["married","single"],
     required: true
  },
  avgMonthlyIncome: {
