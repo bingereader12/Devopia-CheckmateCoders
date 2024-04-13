@@ -7,6 +7,7 @@ import insuranceIcon from "../../public/icons/folder.svg";
 
 const Sidebar = ({ handleClick }) => {
   const menu = [
+    { name: "Dashboard", icon: savingsIcon },
     { name: "Savings", icon: savingsIcon },
     { name: "Transactions", icon: transactionsIcon },
     { name: "Investments", icon: investmentsIcon },

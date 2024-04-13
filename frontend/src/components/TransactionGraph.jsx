@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { Tooltip ,ResponsiveContainer,Cell, PieChart, Pie, Legend, Label,ComposedChart,XAxis,YAxis,Area,Bar,BarChart, Line, AreaChart, RadialBarChart, RadialBar} from 'recharts';
 
 const data = [
   {
@@ -56,14 +48,34 @@ const data = [
 
 export default function TransactionGraph() {
   return (
-    <LineChart width={700} height={300} data={data}>
-      {/* <CartesianGrid strokeDasharray="3 3" /> */}
-      <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+    // <LineChart width={700} height={300} data={data}>
+    //   {/* <CartesianGrid strokeDasharray="3 3" /> */}
+    //   <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+    //   <YAxis />
+    //   <Tooltip />
+    //   <Legend />
+    //   <Line type="monotone" dataKey="inbound" stroke="#00ff00" />
+    //   <Line type="monotone" dataKey="outbound" stroke="#ff0000" />
+    // </LineChart>
+    <AreaChart width={730} height={250} data={data}
+      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+      <defs>
+        <linearGradient id="inbound" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#00ff00" stopOpacity={0.8}/>
+          <stop offset="95%" stopColor="#00ff00" stopOpacity={0}/>
+        </linearGradient>
+        <linearGradient id="outbound" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#ff0000" stopOpacity={0.8}/>
+          <stop offset="95%" stopColor="#ff0000" stopOpacity={0}/>
+        </linearGradient>
+      </defs>
+      <XAxis dataKey="name" />
       <YAxis />
+      {/* <CartesianGrid strokeDasharray="3 3" /> */}
+      <Legend/>
       <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="inbound" stroke="#00ff00" />
-      <Line type="monotone" dataKey="outbound" stroke="#ff0000" />
-    </LineChart>
+      <Area type="monotone" dataKey="inbound" stroke="#00ff00" fillOpacity={1} fill="url(#inbound)" />
+      <Area type="monotone" dataKey="outbound" stroke="#ff0000" fillOpacity={1} fill="url(#outbound)" />
+    </AreaChart>
   );
 }
