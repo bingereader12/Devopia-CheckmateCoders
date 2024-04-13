@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tooltip ,ResponsiveContainer,Cell, PieChart, Pie, Legend, Label,ComposedChart,XAxis,YAxis,Area,Bar,BarChart, Line, AreaChart, RadialBarChart, RadialBar, CartesianGrid, ReferenceLine} from 'recharts';
 // import RSSParser from 'rss-parser';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
