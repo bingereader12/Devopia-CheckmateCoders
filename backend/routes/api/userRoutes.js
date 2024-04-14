@@ -91,6 +91,35 @@ router.post("/details", async (req, res) => {
   }
 });
 
+router.post("/detail",auth, async (req, res) => {
+  try {
+    const {name}  = req.body.name;
+    // console.log(userId)
+    // Retrieve user details based on userId
+    const user = await User.findOne({ fname: { $regex: new RegExp(name, "i") } });
+    // console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // // Extract required information
+    const { _id, investments, loans, insurance } = user;
+
+    // Prepare response
+    const responseBody = {
+      _id,
+      investments,
+      loans,
+      insurance,
+    };
+
+    // Send response to the client
+    res.status(200).json(responseBody);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
