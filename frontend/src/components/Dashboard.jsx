@@ -166,8 +166,8 @@ const Dashboard = () => {
       const savings = await fetchUserData();
       // console.log("savings",savings)
       fetchPastSevenDaysBalances(savings);
-      fetchSpendings()
-      fetchCash()
+      await fetchCash()
+      await fetchSpendings()
     }
 
     showGraph()

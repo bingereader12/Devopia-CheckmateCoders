@@ -27,9 +27,9 @@ const InsuranceComponent = ({insurance}) => {
       <div className="flex justify-between">
         <div className="space-y-2">
           <div className={`text-4xl group-hover:opacity-100 opacity-80 font-semibold`}>{insurance.name}</div>
-          <div className="text-2xl opacity-80 pb-2 font-medium">{insurance.type}</div>
+          <div className="text-2xl opacity-80 pb-2 font-medium capitalize">({insurance.type})</div>
         </div>
-        <img height={40} width={40} src={`/public/icons/${map["other"]}`} alt="" />
+        <img height={40} width={40} src={`/public/icons/${map[insurance.type]}`} alt="" />
       </div>
       <div className="grid opacity-60 grid-cols-2 gap-4">
         <div className="">Start Date</div>

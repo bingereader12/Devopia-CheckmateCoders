@@ -5,6 +5,7 @@ import logoutIcon from "../../public/icons/log-out.svg";
 import investmentsIcon from "../../public/icons/bar-chart.svg";
 import loansIcon from "../../public/icons/wallet.svg";
 import insuranceIcon from "../../public/icons/folder.svg";
+import Cookies from 'js-cookie'
 
 const Sidebar = ({ handleClick }) => {
   const menu = [
@@ -16,6 +17,12 @@ const Sidebar = ({ handleClick }) => {
     { name: "Family Expenses", icon: insuranceIcon },
   ];
   const [activeTab, setActiveTab] = useState("Dashboard");
+
+  function handleLogout() {
+    Cookies.remove("token")
+    Cookies.remove("sessionId")
+    window.location.replace("../login")
+  }
 
   const handleTabClick = (item) => {
     setActiveTab(item.name);
@@ -46,7 +53,7 @@ const Sidebar = ({ handleClick }) => {
             );
           })}
         </div>
-        <div onClick={() => {}} className={`p-2 text-xl font-bold flex mb-3`}>
+        <div onClick={() => handleLogout()} className={`p-2 text-xl font-bold flex mb-3`}>
           <img src={logoutIcon} alt="icon" className="h-6 w-6 mr-3 mt-1" />
           <span className="text-[#ff4444]">Logout</span>
         </div>
