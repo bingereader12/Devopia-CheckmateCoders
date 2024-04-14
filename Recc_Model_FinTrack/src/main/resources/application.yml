@@ -1,0 +1,6 @@
+nn:
+  file:
+    input: C:\Users\jain4\Downloads\financial-product-recommendation-system-master\src\main\resources\CUST_INVESTMENT.csv
+    output: C:\Users\jain4\Downloads\financial-product-recommendation-system-master\output\data_reference.csv
+  checkpoint: C:\Users\jain4\Downloads\financial-product-recommendation-system-master\output\
+  model: C:\Users\jain4\Downloads\financial-product-recommendation-system-master\output\recommendation_system_model.h5
