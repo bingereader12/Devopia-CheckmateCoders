@@ -51,6 +51,8 @@ export default function TransactionGraph({
   inboundTransactions,
   outboundTransactions,
 }) {
+
+export default function TransactionGraph({transactions}) {
   // const data = [
   //   {
   //     name: "2024-04-07",
@@ -95,28 +97,6 @@ export default function TransactionGraph({
   //     amt: 2100,
   //   },
   // ];
-  const data = {};
-  inboundTransactions.forEach((inboundTransaction, index) => {
-    data[inboundTransaction.date] = {
-      name: inboundTransaction.date,
-      inbound: inboundTransaction.amount,
-      outbound: 0, // Default to 0 for outbound if not present
-    };
-  });
-  outboundTransactions.forEach((outboundTransaction, index) => {
-    // Check if the outboundTransaction date already exists in the data object
-    if (data[outboundTransaction.date]) {
-      // If yes, update the outbound amount
-      data[outboundTransaction.date].outbound = outboundTransaction.amount;
-    } else {
-      // If not, create a new entry with outbound amount and 0 for inbound
-      data[outboundTransaction.date] = {
-        name: outboundTransaction.date,
-        inbound: 0, // Default to 0 for inbound if not present
-        outbound: outboundTransaction.amount,
-      };
-    }
-  });
   // data.map((el)=>{
   //   const newD = new Date(el.name);
   //   el.name = newD.toDateString().substring(4,10)

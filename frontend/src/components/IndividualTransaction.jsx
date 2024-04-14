@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cookies from 'js-cookie'
 
 const IndividualTransaction = ({ type, transaction}) => {
   console.log(transaction)
@@ -14,6 +15,7 @@ const IndividualTransaction = ({ type, transaction}) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log(transaction.from)
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/details`, {
           method: "POST",
           headers: {
@@ -21,13 +23,14 @@ const IndividualTransaction = ({ type, transaction}) => {
             "x-auth-token": Cookies.get("token"),
             "x-session-id": Cookies.get("sessionId"),
           },
-          body: JSON.stringify({ userId:transaction?.from }),
+          body: JSON.stringify({ userId: transaction.from }),
         }
       );
-      console.log(res);
+      // console.log(res);
       const user1 = await res.json();
-      console.log(user1);
+      // console.log(user1);
       setUser(user1);
+      // console.log(user1)
     } catch (error) {
       
     }
@@ -44,7 +47,7 @@ const IndividualTransaction = ({ type, transaction}) => {
           {type === "Inbound" ? "+" : "-"} ₹{transaction.amount}
         </div>
         <div className="text-right text-gray-400"> {formatDate(transaction.date)} </div>
-        <div className="col-span-2 text-gray-400">{user?.name} - {transaction.paymentMethod}</div>
+        <div className="col-span-2 text-gray-400">{user.fname} {user.lname} - {transaction.paymentMethod}</div>
       </div>
     </div>
   );
