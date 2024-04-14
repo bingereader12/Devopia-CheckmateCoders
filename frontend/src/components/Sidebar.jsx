@@ -24,7 +24,7 @@ const Sidebar = ({ handleClick }) => {
   return (
     <div className="w-96 pl-8 h-full flex flex-col gap-10 text-left p-2 cursor-pointer bg-[#161616] ronuded-lg">
       <h1 className="text-3xl font-bold text-primaryYellow ml-2 w-full mt-8">
-        Finance App
+        FinTrack
       </h1>
       <div className="flex flex-col h-full justify-between my-2">
         <div className="flex flex-col gap-5">
