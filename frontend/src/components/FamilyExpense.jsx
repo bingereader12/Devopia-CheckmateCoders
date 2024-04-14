@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 const FamilyExpense = () => {
   const [familyCode, setFamilyCode] = useState("ABCD");
   const [inputCode, setInputCode] = useState("");
@@ -7,76 +7,100 @@ const FamilyExpense = () => {
   const handleJoin = () => {
     setFamilyCode(inputCode);
   };
+  const [allFamilyMember, setAllFamilyMember] = useState([]);
+  const [Family, setFamily] = useState();
   const [familyMember, setFamilyMember] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
 
   useEffect(() => {
-    const fetchUser = async()=>{
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": Cookies.get("token"),
-            "x-session-id": Cookies.get("sessionId"),
-          },
-          body: JSON.stringify({
-            name: familyMember
-          }),
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/family/all/${familyCode}`,
+          {
+            method: "GET",
+          }
+        );
+
+        if (response.ok) {
+          const family = await response.json();
+          setFamily(family);
+        } else {
+          const error = await response.json();
+          console.error(error.message);
         }
-      );
-  
-      if (response.ok) {
-        const user = await response.json();
-        console.log(user);
-        // alert("userdata fetch successfully")
-      } else {
-        const error = await response.json();
-        console.error(error.message);
-        // Handle error, e.g., show a message to the user
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      
     }
-  }
-  fetchUser();
-  },[familyMember]);
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
-    const fetchtransdata = async()=>{
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": Cookies.get("token"),
-            "x-session-id": Cookies.get("sessionId"),
-          },
-          body: JSON.stringify({
-            name: familyMember
-          }),
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": Cookies.get("token"),
+              "x-session-id": Cookies.get("sessionId"),
+            },
+            body: JSON.stringify({
+              name: familyMember,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          const user = await response.json();
+          console.log(user);
+          // alert("userdata fetch successfully")
+        } else {
+          const error = await response.json();
+          console.error(error.message);
+          // Handle error, e.g., show a message to the user
         }
-      );
-  
-      if (response.ok) {
-        const user = await response.json();
-        console.log(user);
-        // alert("userdata fetch successfully")
-      } else {
-        const error = await response.json();
-        console.error(error.message);
-        // Handle error, e.g., show a message to the user
-      }
-    } catch (error) {
-      
-    }
-  }
-  fetchtransdata();
-  },[familyMember]);
+      } catch (error) {}
+    };
+
+    fetchUser();
+  }, [familyMember]);
+
+  useEffect(() => {
+    const fetchtransdata = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": Cookies.get("token"),
+              "x-session-id": Cookies.get("sessionId"),
+            },
+            body: JSON.stringify({
+              name: familyMember,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          const user = await response.json();
+          console.log(user);
+          // alert("userdata fetch successfully")
+        } else {
+          const error = await response.json();
+          console.error(error.message);
+          // Handle error, e.g., show a message to the user
+        }
+      } catch (error) {}
+    };
+    fetchtransdata();
+  }, [familyMember]);
   return (
     <div>
       {familyCode === "" ? (
@@ -107,8 +131,8 @@ const FamilyExpense = () => {
             <div className="space-y-5">
               <div>
                 <select
-                  name="type"
-                  id="type"
+                  name="member"
+                  id="member"
                   value={familyMember}
                   onChange={(e) => setFamilyMember(e.target.value)}
                   className="shadow border p-2 w-full rounded bg-primaryBlack outline-none text-white text-2xl"

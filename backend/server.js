@@ -8,6 +8,7 @@ const investmentRoutes = require("./routes/api/investmentRoutes");
 const loanRoutes = require("./routes/api/loanRoutes");
 const rssParserRoutes = require("./routes/api/rssParserRoutes");
 const insuranceRoutes = require("./routes/api/insuranceRoutes");
+const familyRoutes = require("./routes/api/familyRoutes");
 
 const cors = require("cors");
 const app = express();
@@ -29,5 +30,6 @@ app.use("/api/investment", investmentRoutes);
 app.use("/api/loan", loanRoutes);
 app.use("/api/rss", rssParserRoutes);
 app.use("/api/insurance", insuranceRoutes);
+app.use("/api/family", familyRoutes);
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));

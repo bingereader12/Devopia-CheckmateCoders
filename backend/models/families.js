@@ -1,17 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const familySchema = new Schema({
-    users: [
-        {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        },
-    ],
-    masterId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+  users: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
+  ],
+  familyCode: {
+    type: String,
+    required: true,
+  },
+  masterId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-module.exports = mongoose.model('Family', familySchema,'families');
+const Family = mongoose.model("Family", familySchema, "families");
+
+module.exports = Family;
