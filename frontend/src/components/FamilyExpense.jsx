@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie"
 const FamilyExpense = () => {
   const [familyCode, setFamilyCode] = useState("ABCD");
   const [inputCode, setInputCode] = useState("");
@@ -9,6 +9,74 @@ const FamilyExpense = () => {
   };
   const [familyMember, setFamilyMember] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async()=>{
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({
+            name: familyMember
+          }),
+        }
+      );
+  
+      if (response.ok) {
+        const user = await response.json();
+        console.log(user);
+        // alert("userdata fetch successfully")
+      } else {
+        const error = await response.json();
+        console.error(error.message);
+        // Handle error, e.g., show a message to the user
+      }
+    } catch (error) {
+      
+    }
+  }
+  fetchUser();
+  },[familyMember]);
+
+  useEffect(() => {
+    const fetchtransdata = async()=>{
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/user/detail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({
+            name: familyMember
+          }),
+        }
+      );
+  
+      if (response.ok) {
+        const user = await response.json();
+        console.log(user);
+        // alert("userdata fetch successfully")
+      } else {
+        const error = await response.json();
+        console.error(error.message);
+        // Handle error, e.g., show a message to the user
+      }
+    } catch (error) {
+      
+    }
+  }
+  fetchtransdata();
+  },[familyMember]);
   return (
     <div>
       {familyCode === "" ? (
