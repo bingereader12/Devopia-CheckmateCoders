@@ -96,8 +96,8 @@ export default function TransactionGraph({ transactions }) {
   //   const newD = new Date(el.name);
   //   el.name = newD.toDateString().substring(4,10)
   // })
-  const chartData = Object.values(data);
-  console.log("chartdata", chartData);
+  // const chartData = Object.values(data);
+  // console.log("chartdata", chartData);
   return (
     // <LineChart width={700} height={300} data={data}>
     //   {/* <CartesianGrid strokeDasharray="3 3" /> */}
@@ -111,7 +111,7 @@ export default function TransactionGraph({ transactions }) {
     <AreaChart
       width={730}
       height={250}
-      data={chartData}
+      data={transactions}
       margin={{ top: 10, right: 50, left: 0, bottom: 0 }}
     >
       <defs>

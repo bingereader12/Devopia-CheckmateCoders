@@ -100,7 +100,7 @@ const FormModal = ({ setOpenModal }) => {
   return (
     <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-[rgba(0,0,0,0.8)] font-QuickSand font-medium z-50">
       <div className="bg-primaryBlack shadow-boxShadow rounded-lg w-[650px] h-[70%] overflow-y-auto no-scrollbar px-5 ">
-      <div className="text-4xl pt-8 flex items-center justify-between bg-darkOrange text-primaryYellow rounded-t-lg">
+      <div className="text-4xl pt-8 flex items-center justify-between bg-darkOrange text-primaryYellow rounded-t-lg font-bold">
           Add Insurance
         </div>
         <form onSubmit={handleSubmit}>
