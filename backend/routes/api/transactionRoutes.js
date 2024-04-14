@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../../models/transactions");
 const auth = require( "../../middleware/auth");
-router.get("/inbound", async (req, res) => {
+
+router.get("/inbound", auth, async (req, res) => {
   try {
-    const outTrans = Transaction.find({ to: req.user.userId });
+    const outTrans = await Transaction.find({ to: req.user.userId });
+    console.log(outTrans)
     res.status(200).json(outTrans);
   } catch (err) {
     console.error("Error fetching transactions!", err);
@@ -12,9 +14,10 @@ router.get("/inbound", async (req, res) => {
   }
 });
 
-router.get("/outbound", async (req, res) => {
+router.get("/outbound", auth, async (req, res) => {
   try {
-    const outTrans = Transaction.find({ from: req.user.userId });
+    const outTrans = await Transaction.find({ from: req.user.userId });
+    console.log(outTrans)
     res.status(200).json(outTrans);
   } catch (err) {
     console.error("Error fetching transactions!", err);
@@ -111,8 +114,8 @@ router.get("/outboundSevenDays",auth,async(req,res) => {
         const outboundTrans = []
         for(let i=7;i>0;i--){
             var transTotal = 0;
-            const date=new Date(Date.now() - 24*60*60*1000*(i-1))
-            const date1=new Date(Date.now() - 24*60*60*1000*(i-2))
+            const date=new Date(Date.now() - 24*60*60*1000*(i))
+            const date1=new Date(Date.now() - 24*60*60*1000*(i-1))
             const allTransactions = await Transaction.find({ 
                 date: {
                   $gte: new Date(date), 

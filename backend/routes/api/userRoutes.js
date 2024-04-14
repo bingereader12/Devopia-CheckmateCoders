@@ -63,7 +63,7 @@ router.get("/details",auth, async (req, res) => {
   }
 });
 
-router.post("/details",auth, async (req, res) => {
+router.post("/details", async (req, res) => {
   try {
     const userId = req.body.userId;
     // console.log(userId)

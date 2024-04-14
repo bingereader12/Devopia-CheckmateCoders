@@ -130,7 +130,7 @@ const Dashboard = () => {
         });
         const data = await res.json();
         setRssFeed(data.feed.items);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching RSS feed:", error);
       }
@@ -156,7 +156,7 @@ const Dashboard = () => {
       const user1 = await res.json();
       setUser(user1);
       return user1.savings;
-      console.log(user1);
+      // console.log(user1);
       } catch (error) {
         console.error("Error fetching RSS feed:", error);
       }
@@ -164,7 +164,7 @@ const Dashboard = () => {
 
     const showGraph = async() => {
       const savings = await fetchUserData();
-      console.log("savings",savings)
+      // console.log("savings",savings)
       fetchPastSevenDaysBalances(savings);
       fetchSpendings()
       fetchCash()
@@ -179,7 +179,7 @@ const Dashboard = () => {
     const fetchTransactions = async () => {
       try {
         const date1 = new Date().toISOString();
-        console.log(date1);
+        // console.log(date1);
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionDay`, {
           method: "POST",
           headers: {
@@ -195,7 +195,7 @@ const Dashboard = () => {
           setTransactions(data.transactions);
           setBalances(data.balances);
           setPreviousDayBalance(data.previousDayBalance);
-          console.log(data);
+          // console.log(data);
         } else {
           // Handle error response
           console.error("Error fetching transactions:", response.statusText);
@@ -237,7 +237,7 @@ const Dashboard = () => {
       }
     });
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     setCash([{
       name: "Cash",
       value: data.cashSum,
@@ -249,7 +249,7 @@ const Dashboard = () => {
   }
 
   const fetchPastSevenDaysBalances = async (savings) => {
-    console.log(savings)
+    // console.log(savings)
     var previousDayBalance = savings
     var pastSevenDaysBalances1 = []
     // Loop through the last 7 days
@@ -257,11 +257,11 @@ const Dashboard = () => {
       const date2 = new Date(Date.now() - 24*60*60*1000*(i-2));
       const date = new Date(Date.now() - 24*60*60*1000*(i-1));
       // date.setDate();
-      console.log(date)
+      // console.log(date)
       
       try {
         const formattedDate = date.toISOString();
-        console.log(formattedDate)
+        // console.log(formattedDate)
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/transaction/transactionSevenDays`, {
           method: "POST",
           headers: {
@@ -274,11 +274,11 @@ const Dashboard = () => {
   
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          // console.log(data)
           // const balance = calculateBalance(data.transactions, data.previousDayBalance);
-          console.log(data.inBoundAmount,data.outBoundAmount)
+          // console.log(data.inBoundAmount,data.outBoundAmount)
           const balance = previousDayBalance - data.inBoundAmount + data.outBoundAmount;
-          console.log(balance)
+          // console.log(balance)
           pastSevenDaysBalances1.push({ name: date, amt: balance });
           previousDayBalance = balance
         } else {
@@ -297,7 +297,7 @@ const Dashboard = () => {
     setPastSevenDaysBalances(pastSevenDaysBalances1)
   
     // Now pastSevenDaysBalances contains balances for the last 7 days
-    console.log("Past 7 days balances:", pastSevenDaysBalances);
+    // console.log("Past 7 days balances:", pastSevenDaysBalances);
   };
   
   const calculateBalance = (transactions, previousDayBalance) => {

@@ -19,7 +19,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 
-export default function TransactionGraph({inboundTransactions, outboundTransactions}) {
+export default function TransactionGraph({transactions}) {
   // const data = [
   //   {
   //     name: "2024-04-07",
@@ -64,34 +64,12 @@ export default function TransactionGraph({inboundTransactions, outboundTransacti
   //     amt: 2100,
   //   },
   // ];
-  const data = {};
-  inboundTransactions.forEach((inboundTransaction, index) => {
-    data[inboundTransaction.date] = {
-      name: inboundTransaction.date,
-      inbound: inboundTransaction.amount,
-      outbound: 0, // Default to 0 for outbound if not present
-    };
-  });
-  outboundTransactions.forEach((outboundTransaction, index) => {
-    // Check if the outboundTransaction date already exists in the data object
-    if (data[outboundTransaction.date]) {
-      // If yes, update the outbound amount
-      data[outboundTransaction.date].outbound = outboundTransaction.amount;
-    } else {
-      // If not, create a new entry with outbound amount and 0 for inbound
-      data[outboundTransaction.date] = {
-        name: outboundTransaction.date,
-        inbound: 0, // Default to 0 for inbound if not present
-        outbound: outboundTransaction.amount,
-      };
-    }
-  });
   // data.map((el)=>{
   //   const newD = new Date(el.name);
   //   el.name = newD.toDateString().substring(4,10)
   // })
-  const chartData = Object.values(data);
-  console.log('chartdata',chartData);
+  // const chartData = Object.values(data);
+  // console.log('chartdata',chartData);
   return (
     // <LineChart width={700} height={300} data={data}>
     //   {/* <CartesianGrid strokeDasharray="3 3" /> */}
@@ -102,7 +80,7 @@ export default function TransactionGraph({inboundTransactions, outboundTransacti
     //   <Line type="monotone" dataKey="inbound" stroke="#00ff00" />
     //   <Line type="monotone" dataKey="outbound" stroke="#ff0000" />
     // </LineChart>
-    <AreaChart width={730} height={250} data={chartData}
+    <AreaChart width={730} height={250} data={transactions}
       margin={{ top: 10, right: 50, left: 0, bottom: 0 }}>
       <defs>
         <linearGradient id="inbound" x1="0" y1="0" x2="0" y2="1">
