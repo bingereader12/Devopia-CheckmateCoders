@@ -4,10 +4,10 @@ const Insurance = require("../../models/insurances");
 const User = require("../../models/users");
 const auth = require("../../middleware/auth");
 
-router.post("/", async (req, res) => {
+router.post("/postinsurance",auth, async (req, res) => {
   try {
+    const userId = req.user.userId;
     const {
-      userId,
       name,
       type,
       startDate,
@@ -42,9 +42,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", auth, async (req, res) => {
+router.get("/getinsurance", auth, async (req, res) => {
   try {
-    const { userId } = req.body;
+    const  userId  = req.user.userId;
+    console.log(userId);
     const insurances = await Insurance.find({ userId });
     return res.status(200).json({ message: insurances });
   } catch (error) {
