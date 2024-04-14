@@ -11,7 +11,7 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData.email);
     console.log(formData.password);
@@ -23,7 +23,10 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       }
     );
 
@@ -41,9 +44,8 @@ const Login = () => {
       // console.log(`cookie data :${name}`);
       const name1 = Cookies.get("sessionId");
       window.location.href = "/dashboard";
-    }
-    else if (response.status == 400) {
-      Alert("Email and/or password is incorrect");
+    } else if (response.status == 400) {
+      alert("Email and/or password is incorrect");
     } else {
       const error = await response.json();
       console.error(error.message);

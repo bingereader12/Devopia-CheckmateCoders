@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Investment = require("../../models/investments");
 const User = require("../../models/users");
-const yahooFinance = require('yahoo-finance2').default; 
-const auth= require( "../../middleware/auth") ; 
+const yahooFinance = require("yahoo-finance2").default;
+const auth = require("../../middleware/auth");
 
-router.post("/",auth, async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   try {
     const userId = req.user.userId;
     const { name, type, date, currentValue, initialValue } = req.body;
@@ -36,7 +36,7 @@ router.post("/",auth, async (req, res) => {
   }
 });
 
-router.get("/",auth, async (req, res) => {
+router.get("/getAll", auth, async (req, res) => {
   try {
     const { userId } = req.user.userId;
     const investments = await Investment.find({ userId });
@@ -46,34 +46,44 @@ router.get("/",auth, async (req, res) => {
   }
 });
 
-router.get("/risk",auth, async(req, res) => {
-  const results = await yahooFinance.quote('AAPL');
+router.get("/risk", auth, async (req, res) => {
+  const results = await yahooFinance.quote("AAPL");
 
   function normalize(value, min, max) {
     return (value - min) / (max - min);
-   }
-   
-   function calculateRiskScore(data) {
+  }
+
+  function calculateRiskScore(data) {
     // Normalize metrics
-    const priceChangeNormalized = normalize(data.regularMarketChangePercent, -100, 100);
+    const priceChangeNormalized = normalize(
+      data.regularMarketChangePercent,
+      -100,
+      100
+    );
     const volumeNormalized = normalize(data.regularMarketVolume, 0, 1000000000); // Assuming a maximum volume of 1 billion
     const peRatioNormalized = normalize(data.trailingPE, 0, 100); // Assuming a maximum PE ratio of 100
     const marketCapNormalized = normalize(data.marketCap, 0, 1000000000000); // Assuming a maximum market cap of 1 trillion
     const epsNormalized = normalize(data.epsTrailingTwelveMonths, 0, 10); // Assuming a maximum EPS of 10
-   
+
     // Calculate risk score
-    const riskScore = (priceChangeNormalized + volumeNormalized + peRatioNormalized + marketCapNormalized + epsNormalized) / 5;
-   
+    const riskScore =
+      (priceChangeNormalized +
+        volumeNormalized +
+        peRatioNormalized +
+        marketCapNormalized +
+        epsNormalized) /
+      5;
+
     return riskScore;
-   }
-   
-   const riskScore = calculateRiskScore(results);
-   console.log(`Risk Score: ${riskScore}`);
+  }
 
-  res.status(200).json(riskScore)
-})
+  const riskScore = calculateRiskScore(results);
+  console.log(`Risk Score: ${riskScore}`);
 
-router.get("/:id",auth, async (req, res) => {
+  res.status(200).json(riskScore);
+});
+
+router.get("/:id", auth, async (req, res) => {
   try {
     const investmentId = req.params.id;
     const userId = req.user.userId;
@@ -94,7 +104,7 @@ router.get("/:id",auth, async (req, res) => {
   }
 });
 
-router.delete("/:id",auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const investmentId = req.params.id;
     const userId = req.user.userId;
@@ -124,6 +134,5 @@ router.delete("/:id",auth, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;

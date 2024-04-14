@@ -18,6 +18,7 @@ import {
   RadialBarChart,
   RadialBar,
 } from "recharts";
+import Cookies from "js-cookie";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -355,9 +356,29 @@ const FormModal = ({ setOpenModal }) => {
     initialValue: 0,
   });
 
+  // function handleChange(event) {
+  //   var { name, value } = event.target;
+  //   setFormData((prev) => {
+  //     return {
+  //       ...prev,
+  //       [name]: value,
+  //     };
+  //   });
+  // }
+
   function handleChange(event) {
     var { name, value } = event.target;
     setFormData((prev) => {
+      if (prev.type === "stocks" && name === "stock") {
+        const selectedStock = stocksList.find(
+          (stock) => stock.symbol === value
+        );
+        return {
+          ...prev,
+          name: selectedStock ? selectedStock.symbol : "",
+          [name]: value,
+        };
+      }
       return {
         ...prev,
         [name]: value,
@@ -365,9 +386,35 @@ const FormModal = ({ setOpenModal }) => {
     });
   }
 
+  const submitData = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/investment/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": Cookies.get("token"),
+          "x-session-id": Cookies.get("sessionId"),
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          type: formData.type,
+          date: formData.date,
+          currentValue: formData.currentValue,
+          inititalValue: formData.initialValue,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error Adding Investment:", error);
+    }
+  };
+
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+    setOpenModal(false);
+    submitData();
+    // console.log(formData);
   }
 
   return (
@@ -445,7 +492,7 @@ const FormModal = ({ setOpenModal }) => {
               Start Date
             </label>
             <input
-              name="startDate"
+              name="date"
               type="date"
               id="date"
               value={formData.date}
