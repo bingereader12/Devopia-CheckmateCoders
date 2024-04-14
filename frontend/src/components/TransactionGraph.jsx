@@ -47,12 +47,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-export default function TransactionGraph({
-  inboundTransactions,
-  outboundTransactions,
-}) {
-
-export default function TransactionGraph({transactions}) {
+export default function TransactionGraph({ transactions }) {
   // const data = [
   //   {
   //     name: "2024-04-07",

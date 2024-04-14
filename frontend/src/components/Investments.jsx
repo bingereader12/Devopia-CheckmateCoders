@@ -388,21 +388,24 @@ const FormModal = ({ setOpenModal }) => {
 
   const submitData = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/investment/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": Cookies.get("token"),
-          "x-session-id": Cookies.get("sessionId"),
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          type: formData.type,
-          date: formData.date,
-          currentValue: formData.currentValue,
-          inititalValue: formData.initialValue,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/investment/add`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            type: formData.type,
+            date: formData.date,
+            currentValue: formData.currentValue,
+            initialValue: formData.initialValue,
+          }),
+        }
+      );
       const data = await res.json();
       console.log(data);
     } catch (error) {
