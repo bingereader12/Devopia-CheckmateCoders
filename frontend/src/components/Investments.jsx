@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Tooltip,
   ResponsiveContainer,
@@ -45,6 +45,8 @@ const IndividualInvestment = ({
   currentValue,
   initialValue,
 }) => {
+
+  const date1 = new Date(date)
   return (
     <div className="border-t-2 border-primaryGray p-4 mx-auto flex w-full">
       <div className="flex flex-col w-full">
@@ -54,7 +56,7 @@ const IndividualInvestment = ({
             <span className="opacity-40 text-md">(Type: {type})</span>
           </div>
           <div className="text-right text-[#fff] opacity-60 text-lg font-medium">
-            Start Date: {date.toLocaleDateString()}
+            Start Date: {date1.toLocaleDateString()}
           </div>
         </div>
         <div className="flex justify-between">
@@ -77,9 +79,62 @@ const IndividualInvestment = ({
 const Investments = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [invTypes,setInvTypes] = useState([{}])
+  const [inv,setInv] = useState([])
   const handleShowMore = () => {
     setShowAll(true);
   };
+
+  const fetchAllInv = async() => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/investment/getAll`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": Cookies.get("token"),
+          "x-session-id": Cookies.get("sessionId"),
+        },
+      }
+    );
+    const data = await res.json();
+    console.log(data)
+    setInv(data.message)
+    } catch (error) {
+      console.error("Error fetching RSS feed:", error);
+    }
+  }
+
+  const fetchInvTypes = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/investment/types`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": Cookies.get("token"),
+          "x-session-id": Cookies.get("sessionId"),
+        },
+      }
+    );
+    const data = await res.json();
+    // console.log(data)
+    var data2 = []
+    for (const [key, value] of Object.entries(data)){
+        data2.push({
+          name: key,
+          value: value,
+        })
+    };
+    // console.log(data2);
+    setInvTypes(data2)
+    } catch (error) {
+      console.error("Error fetching RSS feed:", error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchInvTypes()
+    fetchAllInv()
+  },[])
 
   const dummyData = [
     {
@@ -183,7 +238,7 @@ const Investments = () => {
       fill: "#8884d8",
     },
   ];
-  const colors = ["#303450", "#bcc1cd", "#ffb800"];
+  const colors = ["#303450", "#ffb800", "#bcc1cd"];
   return (
     <div className="overflow-y-auto h-full no-scrollbar">
       <div className="flex items-center justify-between mb-10">
@@ -240,7 +295,7 @@ const Investments = () => {
               <PieChart>
                 <Tooltip contentStyle={{ color: "black" }} />
                 <Pie
-                  data={data1}
+                  data={invTypes}
                   cx="50%"
                   cy="50%"
                   stroke="transparent"
@@ -250,7 +305,7 @@ const Investments = () => {
                   cornerRadius={10}
                   className="border-black"
                 >
-                  {data1.map((entry, index) => (
+                  {invTypes.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={colors[index]}
@@ -274,7 +329,7 @@ const Investments = () => {
               <h3 className="text-xl font-semibold text-[#fff] opacity-60 pl-4 py-1 my-1 mx-2">
                 All Investments
               </h3>
-              {!showAll && dummyData.length > 2 && (
+              {!showAll && inv.length > 2 && (
                 <button
                   className="my-1 mr-4 flex hover:border-[#666] text-[#666666] border border-[#333] font-bold py-1 px-4 rounded"
                   onClick={handleShowMore}
@@ -283,8 +338,8 @@ const Investments = () => {
                 </button>
               )}
             </div>
-            {dummyData
-              .slice(0, showAll ? dummyData.length : 2)
+            {inv
+              .slice(0, showAll ? inv.length : 2)
               .map((investment, index) => (
                 <IndividualInvestment
                   key={index}
@@ -296,11 +351,8 @@ const Investments = () => {
                 />
               ))}
           </div>
-          <div className="flex w-[30%] h-64 border-2 border-[#414141] rounded-lg">
+          {/* <div className="flex w-[30%] h-64 border-2 border-[#414141] rounded-lg">
             <ResponsiveContainer width="100%" height={250}>
-              {/* Render your graph based on selectedInvestment.graphData */}
-              {/* Example: selectedInvestment.graphData*/}
-              {/* <h1>{selectedInvestment ? selectedInvestment.percentage : 'XX%'}</h1> */}
               <PieChart>
                 <Tooltip contentStyle={{ color: "black" }} />
                 <Pie
@@ -326,7 +378,7 @@ const Investments = () => {
                 <Legend iconType="circle" align="bottom" layout="horizontal" />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

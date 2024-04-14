@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const auth= require( "../../middleware/auth") ; 
+const Investment = require("../../models/investments");
+const Loan = require("../../models/loans");
+const Insurance = require("../../models/insurances");
 router.post("/signup", async (req, res) => {
   try {
     const { fname, lname, email, password, dob, phone, marital, income, bank } =
@@ -161,5 +164,43 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get("/networth",auth,async(req,res)=>{
+    try {
+        const userId = req.user.userId;
+        const user = await User.findById(userId);
+        console.log(user)
+        const sav = user.savings;
+        console.log(sav)
+        const inv = await Investment.find({ userId })
+        console.log("inv: ",inv)
+        var invTotal = 0
+            inv.forEach((el)=>{
+                invTotal+=el.currentValue;
+            })
+        console.log(invTotal)
+        const loans = await Loan.find({ userId })
+        var loanTotal = 0
+            loans.forEach((el)=>{
+                loanTotal+=el.amount;
+            })
+        console.log(loanTotal)
+        const ins = await Insurance.find({ userId })
+        console.log("ins: ",ins)
+        var insTotal = 0
+            ins.forEach((el)=>{
+                insTotal+=el.coverAmount;
+            })
+        console.log(insTotal)
+        const net = sav + invTotal + insTotal - loanTotal;
+        console.log("net: ",net)
+        await User.findByIdAndUpdate(userId,{ netWorth: net })
+    
+        // Send response to the client
+        res.status(200).json(net);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+})
 
 module.exports = router;

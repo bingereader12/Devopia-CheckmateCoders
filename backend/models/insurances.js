@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const insuranceSchema = new Schema({
-  userId: ObjectId,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User', 
+    required: true
+ },
   name: {
     type: String,
     required: true,

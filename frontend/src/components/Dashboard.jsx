@@ -163,6 +163,7 @@ const Dashboard = () => {
     };
 
     const showGraph = async() => {
+      await fetchNet()
       const savings = await fetchUserData();
       // console.log("savings",savings)
       fetchPastSevenDaysBalances(savings);
@@ -225,6 +226,19 @@ const Dashboard = () => {
       el.name = newD.toDateString().substring(4, 10);
     });
     setSpendings(data)
+  }
+
+  const fetchNet = async() => {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/networth`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": Cookies.get("token"),
+        "x-session-id": Cookies.get("sessionId"),
+      }
+    });
+    const data = await response.json()
+    console.log(data)
   }
 
   const fetchCash = async() => {

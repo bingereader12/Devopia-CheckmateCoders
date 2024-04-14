@@ -2,10 +2,61 @@ import React, { useEffect, useState } from "react";
 import TransactionSection from "./TransactionSection";
 import TransactionGraph from "./TransactionGraph";
 import Cookies from 'js-cookie'
+
+const data = [
+  {
+    name: "2024-04-08",
+    outbound: 3000,
+    inbound: 1398,
+    amt: 2210,
+  },
+  {
+    name: "2024-04-09",
+    outbound: 2000,
+    inbound: 9800,
+    amt: 2290,
+  },
+  {
+    name: "2024-04-10",
+    outbound: 2780,
+    inbound: 3908,
+    amt: 2000,
+  },
+  {
+    name: "2024-04-11",
+    outbound: 1890,
+    inbound: 4800,
+    amt: 2181,
+  },
+  {
+    name: "2024-04-12",
+    outbound: 4000,
+    inbound: 2400,
+    amt: 2400,
+  },
+  {
+    name: "2024-04-13",
+    outbound: 2390,
+    inbound: 3800,
+    amt: 2500,
+  },
+  {
+    name: "2024-04-14",
+    outbound: 3490,
+    inbound: 4300,
+    amt: 2100,
+  },
+];
+
+data.map((el)=>{
+  const newD = new Date(el.name);
+  el.name = newD.toDateString().substring(4,10)
+})
+
 const Transactions = ({ handleClick }) => {
   const [inboundTransactions, setInboundTransactions] = useState([]);
   const [outboundTransactions, setOutboundTransactions] = useState([]);
-  const [pastSevenDaysBalances, setPastSevenDaysBalances] = useState([{}]);
+  const [pastSevenDaysBalances, setPastSevenDaysBalances] = useState(data);
   useEffect(() => {
     const fetchData = async () => {
       try {

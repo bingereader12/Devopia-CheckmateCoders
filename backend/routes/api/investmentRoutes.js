@@ -38,9 +38,9 @@ router.post("/add", auth, async (req, res) => {
 
 router.get("/getAll", auth, async (req, res) => {
   try {
-    const { userId } = req.user.userId;
+    const userId = req.user.userId;
     const investments = await Investment.find({ userId });
-    return res.status(400).json({ message: investments });
+    return res.status(200).json({ message: investments });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -82,6 +82,21 @@ router.get("/risk", auth, async (req, res) => {
 
   res.status(200).json(riskScore);
 });
+
+router.get('/types', auth, async(req,res)=>{
+  try{
+    const userId = req.user.userId;
+    const investments = await Investment.find({ userId });
+    var data = {}
+    investments.forEach((inv)=>{
+      data[inv.type] = inv.currentValue
+    })
+    console.log(data)
+    res.status(200).json(data)
+  }catch(err){
+    res.status(500).json({ message: err.message });
+  }
+})
 
 router.get("/:id", auth, async (req, res) => {
   try {
