@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoanComponent from "./LoanComponent";
-
+import Cookies from 'js-cookie';
 const Loans = () => {
   const [openModal, setOpenModal] = useState(false);
+  const[data,setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/loan/getloan`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": Cookies.get("token"),
+            "x-session-id": Cookies.get("sessionId"),
+          },
+        }
+      );
+      const user1 = await res.json();
+      console.log(user1.message);
+      setData(user1.message);
+      } catch (error) {
+        console.error("Error fetching RSS feed:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <section className="h-full overflow-y-auto no-scrollbar">
@@ -17,10 +39,9 @@ const Loans = () => {
         {openModal && <FormModal setOpenModal={setOpenModal} />}
       </div>
       <div className="gap-5 flex flex-wrap">
-        <LoanComponent />
-        <LoanComponent />
-        <LoanComponent />
-        <LoanComponent />
+      {data.map((loan, index) => (
+        <LoanComponent key={index} loan={loan} />
+      ))}
       </div>
     </section>
   );

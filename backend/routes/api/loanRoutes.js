@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Loan = require("../../models/loans");
 const User = require("../../models/users");
-
-router.post("/", async (req, res) => {
+const auth = require("../../middleware/auth");
+router.post("/postloan",auth, async (req, res) => {
   try {
-    const { userId, name, type, startDate, amount, rateOfInterest } = req.body;
+    const userId = req.user.userId;
+    const { name, type, startDate, amount, rateOfInterest } = req.body;
     const exists = await Loan.findOne({ name });
     const user = await User.findById(userId);
     if (!user) {
@@ -32,11 +33,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/getloan",auth, async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.user.userId;
     const loans = await Loan.find({ userId });
-    return res.status(400).json({ message: loans });
+    return res.status(200).json({ message: loans });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
