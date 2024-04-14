@@ -4,15 +4,17 @@ import RiskScoreDemo from "./pages/RiskScoreDemo";
 import MainDashoard from "./pages/MainDashoard";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import RiskAnalysis from "./pages/RiskAnalysis";
 
 const App = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <Routes>
         <Route path="/dashboard" element={<MainDashoard />} />
         <Route path="/risk" element={<RiskScoreDemo />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/riskanalysis" element={<RiskAnalysis/>}/>
       </Routes>
     </div>
   );
