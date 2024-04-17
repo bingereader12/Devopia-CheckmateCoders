@@ -23,7 +23,7 @@ The transaction page offers a detailed view of all inbound and outgoing transact
 - Comprehensive listing of transactions with details such as date, amount, and description.
 - Area graph depicting the trend of inbound and outgoing transactions over time.
 
-![Transaction Page](/path/to/transaction_page_image.png)
+![Transaction Page](/Images/Transactions.jpeg)
 
 ### Investments Page
 
@@ -34,7 +34,7 @@ The investments page allows users to monitor and manage their investments effici
 - Donut chart displaying the distribution of investment types.
 - Risk score calculation based on market cap, P/E ratio, and trailing EP to assess investment risk on a scale of 0-1.
 
-![Investments Page](/path/to/investments_page_image.png)
+![Investments Page](/Images/Investments.jpeg)
 
 ### Loans Page
 
@@ -43,7 +43,7 @@ The loans page helps users keep track of their loans and payments, including:
 - Overview of different loans taken, interest rates, and repayment schedules.
 - Monitoring of loan payments to ensure timely payments and avoid penalties.
 
-![Loans Page](/path/to/loans_page_image.png)
+![Loans Page](/Images/Loans.jpeg)
 
 ### Insurance Page
 
@@ -52,7 +52,7 @@ The insurance page provides users with an overview of their insurance policies a
 - Listing of all insurance policies availed by the user.
 - Timely premium reminders to ensure continuous coverage.
 
-![Insurance Page](/path/to/insurance_page_image.png)
+![Insurance Page](/Images/Insurance.jpeg)
 
 ### Family Page
 
@@ -61,13 +61,9 @@ The family page allows users to view the financial summary of other family membe
 - Transactions summary for each family member.
 - Balance overview to understand the financial status of family members.
 
-![Family Page](/path/to/family_page_image.png)
-
 ### Recommendation Model
 
 FinTrack features a recommendation model that utilizes user-inputted details to suggest banking and investment services tailored to their needs and preferences.
-
-![Recommendation Model](/path/to/recommendation_model_image.png)
 
 ## Technologies Used
 
@@ -75,6 +71,7 @@ FinTrack features a recommendation model that utilizes user-inputted details to 
 - Backend: Node.js, Express.js
 - Database: MongoDB
 - APIs: Business news API, Stock data API, Banking and Investment services API
+- ML: - TensorFlow, Pandas, NumPy, SciPy, Scikit-Learn
 
 ## Installation
 
