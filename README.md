@@ -90,10 +90,10 @@ Once the application is running locally, you can access it through your web brow
 
 ## Contributors
 
-- Devesh Jain[@bingereader12]
-- Jagjit Singh Bhumra [@jsbhumra]
-- Dhruv Dedhia [@Dhruv883]
-- Aryan Shirsat [@Aryanshirsat10]
+- **[Devesh Jain](https://www.github.com/bingereader12)**
+- **[Jagjit Singh Bhumra](https://www.github.com/jsbhumra)**
+- **[Dhruv Dedhia](https://www.github.com/Dhruv883)**
+- **[Aryan Shirsat](https://www.github.com/Aryanshirsat10)**
 
 ## License
 
