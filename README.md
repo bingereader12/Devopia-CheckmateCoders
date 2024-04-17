@@ -14,7 +14,7 @@ The financial dashboard provides users with an overview of their financial healt
 - Real-time news feed fetched from a business news API.
 - Daily transaction summary, including money spent and received.
 
-![Financial Dashboard](/path/to/financial_dashboard_image.png)
+![Financial Dashboard](/Images/Dashboard.jpeg)
 
 ### Transaction Page
 
